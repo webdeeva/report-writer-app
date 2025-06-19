@@ -25,6 +25,8 @@ services:
         value: "./data/database.json"
       - key: PDF_OUTPUT_DIR
         value: "output"
+      - key: WEASYPRINT_API_URL
+        value: "http://198.74.52.74"
       - key: JWT_SECRET
         type: SECRET
       - key: OPENROUTER_API_KEY

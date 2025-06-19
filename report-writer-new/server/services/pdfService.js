@@ -11,6 +11,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
 import { saveHtmlAsPdf } from './htmlPdfService.js';
+import { generatePdfFromHtml as externalWeasyPrint, isApiAvailable } from './externalWeasyPrintService.js';
 
 const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
@@ -26,23 +27,40 @@ import { execSync } from 'child_process';
 // Path to the WeasyPrint generator script
 const WEASYPRINT_SCRIPT = path.join(__dirname, '../pdf_generator/weasyprint_generator.py');
 
-// Check if WeasyPrint is available by testing if python3 and the script exist
-let USE_HTML_FALLBACK = true;
-try {
-  // Check if python3 is available
-  execSync('which python3', { stdio: 'ignore' });
-  // Check if WeasyPrint script exists
-  if (fs.existsSync(WEASYPRINT_SCRIPT)) {
-    // Try to import weasyprint in Python
-    execSync('python3 -c "import weasyprint"', { stdio: 'ignore' });
-    USE_HTML_FALLBACK = false;
-    console.log('WeasyPrint is available');
-  } else {
-    console.log('WeasyPrint script not found');
+// Check PDF generation method availability
+let PDF_METHOD = 'fallback'; // 'external', 'local', or 'fallback'
+
+// First, check if external WeasyPrint API is available
+async function checkPdfMethod() {
+  try {
+    const externalAvailable = await isApiAvailable();
+    if (externalAvailable) {
+      PDF_METHOD = 'external';
+      console.log('Using external WeasyPrint API for PDF generation');
+      return;
+    }
+  } catch (error) {
+    console.log('External WeasyPrint API not available:', error.message);
   }
-} catch (error) {
-  console.log('WeasyPrint not available, using HTML fallback');
+  
+  // Check if local WeasyPrint is available
+  try {
+    execSync('which python3', { stdio: 'ignore' });
+    if (fs.existsSync(WEASYPRINT_SCRIPT)) {
+      execSync('python3 -c "import weasyprint"', { stdio: 'ignore' });
+      PDF_METHOD = 'local';
+      console.log('Using local WeasyPrint for PDF generation');
+      return;
+    }
+  } catch (error) {
+    console.log('Local WeasyPrint not available');
+  }
+  
+  console.log('Using fallback HTML/PDF generation');
 }
+
+// Initialize PDF method check
+checkPdfMethod();
 
 // Output directory for PDF files
 const OUTPUT_DIR = path.join(__dirname, '../output');
@@ -65,38 +83,59 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 async function generatePdfFromHtml(html, outputFilename, options = {}) {
   const { debug = false, baseUrl = null } = options;
   
-  // Use HTML fallback if WeasyPrint is not available
-  if (USE_HTML_FALLBACK) {
-    console.log('WeasyPrint not available, using fallback PDF generation');
-    return await saveHtmlAsPdf(html, outputFilename);
+  // Check PDF method again in case it wasn't initialized
+  if (PDF_METHOD === 'fallback' && !checkPdfMethod.called) {
+    await checkPdfMethod();
+    checkPdfMethod.called = true;
   }
   
-  // Create a temporary HTML file
-  const tempHtmlPath = path.join(OUTPUT_DIR, `${outputFilename}.html`);
-  const outputPath = path.join(OUTPUT_DIR, `${outputFilename}.pdf`);
+  // Use external WeasyPrint API if available
+  if (PDF_METHOD === 'external') {
+    try {
+      console.log('Generating PDF using external WeasyPrint API');
+      // Extract CSS from style tags if present
+      let css = '';
+      if (html.includes('<style>')) {
+        const styleMatches = html.match(/<style[^>]*>([\s\S]*?)<\/style>/gi);
+        if (styleMatches) {
+          css = styleMatches.map(tag => tag.replace(/<\/?style[^>]*>/gi, '')).join('\n');
+        }
+      }
+      return await externalWeasyPrint(html, outputFilename, css);
+    } catch (error) {
+      console.error('External WeasyPrint failed, falling back:', error.message);
+      PDF_METHOD = 'fallback';
+    }
+  }
   
-  try {
-    // Write HTML content to a temporary file
-    await writeFile(tempHtmlPath, html, 'utf8');
+  // Use local WeasyPrint if available
+  if (PDF_METHOD === 'local') {
+    // Create a temporary HTML file
+    const tempHtmlPath = path.join(OUTPUT_DIR, `${outputFilename}.html`);
+    const outputPath = path.join(OUTPUT_DIR, `${outputFilename}.pdf`);
     
-    // Build command arguments
-    const args = [
-      WEASYPRINT_SCRIPT,
-      '--file', tempHtmlPath,
-      '--output', outputPath,
-    ];
-    
-    if (baseUrl) {
-      args.push('--base-url', baseUrl);
-    }
-    
-    if (debug) {
-      args.push('--debug');
-    }
-    
-    // Execute the WeasyPrint script
-    return new Promise((resolve, reject) => {
-      const process = spawn('python3', args);
+    try {
+      // Write HTML content to a temporary file
+      await writeFile(tempHtmlPath, html, 'utf8');
+      
+      // Build command arguments
+      const args = [
+        WEASYPRINT_SCRIPT,
+        '--file', tempHtmlPath,
+        '--output', outputPath,
+      ];
+      
+      if (baseUrl) {
+        args.push('--base-url', baseUrl);
+      }
+      
+      if (debug) {
+        args.push('--debug');
+      }
+      
+      // Execute the WeasyPrint script
+      return new Promise((resolve, reject) => {
+        const process = spawn('python3', args);
       
       let stdout = '';
       let stderr = '';
@@ -128,9 +167,15 @@ async function generatePdfFromHtml(html, outputFilename, options = {}) {
         reject(new Error(`Failed to start PDF generation process: ${err.message}`));
       });
     });
-  } catch (error) {
-    throw new Error(`PDF generation failed: ${error.message}`);
+    } catch (error) {
+      console.error('Local WeasyPrint failed, falling back:', error.message);
+      PDF_METHOD = 'fallback';
+    }
   }
+  
+  // Fallback to HTML/PDF generation
+  console.log('Using fallback PDF generation');
+  return await saveHtmlAsPdf(html, outputFilename);
 }
 
 /**
