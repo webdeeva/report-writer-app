@@ -44,7 +44,15 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Report Writer API' });
 });
 
-// Health check endpoint
+// Health check endpoint - both with and without /api prefix for DigitalOcean routing
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
+    port: process.env.PORT
+  });
+});
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
@@ -67,11 +75,20 @@ app.use((req, res, next) => {
   next();
 });
 
+// Mount routes with /api prefix for local development
 app.use('/api/auth', authRoutes);
 app.use('/api/people', peopleRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/user', userRoutes);
+
+// Also mount routes without /api prefix for DigitalOcean deployment
+// (DigitalOcean strips the /api prefix when routing)
+app.use('/auth', authRoutes);
+app.use('/people', peopleRoutes);
+app.use('/reports', reportRoutes);
+app.use('/admin', adminRoutes);
+app.use('/user', userRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
