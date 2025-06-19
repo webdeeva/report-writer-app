@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "$2a$10$3UUHUyH.XEQ/IbNGQ8JIXeuxR3X1bUkGb1oFfYC.XMc8.68qou.EG",
+      "isAdmin": true,
+      "createdAt": "2025-05-20T11:41:53.422Z"
+    }
+  ],
+  "people": [],
+  "reports": [],
+  "settings": []
+}

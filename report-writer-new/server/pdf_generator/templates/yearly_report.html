@@ -1,0 +1,676 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<style>
+  @page {
+    size: letter;  /* 8.5 x 11 inches */
+    margin: 1cm;
+  }
+  
+  .yearly-report-header {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .cover-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .cover-title {
+    margin-top: 2cm;
+  }
+  
+  .report-logo {
+    width: 150px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .birth-card-section {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 2cm auto;
+    text-align: center;
+    max-width: 400px;
+  }
+  
+  .year-card-section {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .card-description {
+    margin-top: 15px;
+    text-align: left;
+  }
+  
+  .card-meaning {
+    font-style: italic;
+    color: #555;
+  }
+  
+  .yearly-influences {
+    margin-top: 30px;
+  }
+  
+  .influence-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .influence-title {
+    font-weight: bold;
+    color: #800000;
+  }
+  
+  /* Markdown styles */
+  .analysis-content h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .analysis-content h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 8px;
+  }
+  
+  .analysis-content h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 12px;
+    margin-bottom: 6px;
+  }
+  
+  .analysis-content p {
+    margin-bottom: 10px;
+  }
+  
+  .analysis-content ul {
+    margin-left: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .analysis-content li {
+    margin-bottom: 5px;
+    list-style-type: disc;
+  }
+  
+  .analysis-content strong {
+    font-weight: bold;
+  }
+  
+  .analysis-content em {
+    font-style: italic;
+  }
+  
+  .page-break {
+    page-break-after: always;
+  }
+  
+  .spread-page {
+    margin-top: 1cm;
+    margin-bottom: 1cm;
+  }
+  
+  .card-divider {
+    text-align: center;
+    margin: 50px 0;
+    font-size: 24px;
+    color: #800000;
+  }
+  
+  /* Cardology Karma styles */
+  .karma-cards {
+    margin-top: 30px;
+  }
+  
+  .karma-card {
+    margin-bottom: 40px;
+    page-break-inside: avoid;
+  }
+  
+  .karma-card h3 {
+    color: #800000;
+    font-size: 20px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+  }
+  
+  .positive-experiences {
+    background-color: #f0f9f0;
+    border-left: 5px solid #4CAF50;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+  
+  .negative-experiences {
+    background-color: #fff0f0;
+    border-left: 5px solid #F44336;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+  
+  .positive-experiences h4, .negative-experiences h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  
+  .positive-experiences h4 {
+    color: #2E7D32;
+  }
+  
+  .negative-experiences h4 {
+    color: #C62828;
+  }
+  
+  .positive-experiences ul, .negative-experiences ul {
+    margin-left: 20px;
+    margin-bottom: 0;
+  }
+  
+  .positive-experiences li, .negative-experiences li {
+    margin-bottom: 8px;
+  }
+  
+  /* Card Positions Explanation styles */
+  .positions-explanation {
+    margin-top: 20px;
+  }
+  
+  .position-item {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .position-item h3 {
+    color: #800000;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .position-item p {
+    margin-bottom: 0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <!-- Cover Page with Birth Card -->
+  <div class="cover-page">
+    {% if custom_logo %}
+      <img src="{{ custom_logo }}" alt="Custom Logo" class="report-logo">
+    {% else %}
+      <img src="logo.png" alt="Report Writer Logo" class="report-logo">
+    {% endif %}
+    <div class="cover-title">
+      <h2 class="text-center">{{ person_name }} - Age {{ age }}</h2>
+      <p class="text-center">Birth Date: {{ birthdate }}</p>
+      {% if custom_age %}
+        <p class="text-center italic">Custom Age Analysis: {{ custom_age }}</p>
+      {% endif %}
+    </div>
+    
+    <div class="birth-card-section" style="padding: 10px; margin: 1cm auto;">
+      <h2>Birth Card</h2>
+      <div class="card-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 600px; margin: 0 auto;">
+        {% for card in birth_cards %}
+          <div style="flex: 0 0 auto; margin: 5px;">
+            <div class="card {{ card.suit|lower }}" style="width: 60px; height: 90px;">
+              <div class="card-top-left">{{ card.value }}</div>
+              <div class="card-center">{{ card.symbol }}</div>
+              <div class="card-bottom-right">{{ card.value }}</div>
+            </div>
+            <div class="card-placement" style="font-size: 10px;">Sun</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+    <div class="cover-footer">
+      {% if custom_footer %}
+        <div class="custom-footer">
+          {{ custom_footer | markdown | safe }}
+        </div>
+      {% else %}
+        <p>Generated on {{ generated_date | formatDate }} | Report Writer</p>
+      {% endif %}
+    </div>
+  </div>
+  
+  <!-- Page Break -->
+  <div class="page-break"></div>
+  
+  <!-- Yearly Spread Page -->
+  <div class="spread-page">
+    <h2 class="text-center">Yearly Spread</h2>
+    
+    <div class="year-card-section">
+      <div class="card-container">
+        {% for position in spread_with_positions %}
+          <div>
+            <div class="card {{ position.card.suit|lower }}">
+              <div class="card-top-left">{{ position.card.value }}</div>
+              <div class="card-center">{{ position.card.symbol }}</div>
+              <div class="card-bottom-right">{{ position.card.value }}</div>
+            </div>
+            <div class="card-placement">{{ position.position }}</div>
+          </div>
+        {% endfor %}
+      </div>
+      
+      <div class="card-divider">♥♣♦♠♥♣♦♠♥♣♦♠♥♣♦♠</div>
+    </div>
+  </div>
+  
+  <!-- Page Break -->
+  <div class="page-break"></div>
+  
+  <!-- Card Positions Explanation Page -->
+  <div class="section">
+    <h2 class="text-center">Understanding Card Positions</h2>
+    <p>Each position in your yearly spread represents a different area of influence in your life for the coming year. Understanding these positions provides context for interpreting the cards that appear in them.</p>
+    
+    <div class="positions-explanation">
+      <div class="position-item">
+        <h3>Sun</h3>
+        <p>The Sun placement represents your core identity and vital energy for the year. It illuminates your primary focus and the central theme that will drive your experiences. This card reveals how you'll express yourself and where your life force will be directed during this yearly cycle.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Mercury</h3>
+        <p>The Mercury placement governs your communication, thinking patterns, and intellectual pursuits for the year. It influences how you process information, express ideas, and connect with others through words and thoughts. This card reveals the mental themes and communication style that will be prominent.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Venus</h3>
+        <p>The Venus placement shapes your relationships, values, and what you find beautiful or pleasurable this year. It influences your approach to love, harmony, finances, and aesthetics. This card reveals how you'll connect with others emotionally and what you'll be drawn to or appreciate.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Mars</h3>
+        <p>The Mars placement determines your drive, ambition, and how you assert yourself this year. It influences your energy levels, passion, and approach to challenges. This card reveals how you'll take action, pursue desires, and handle conflicts or competitive situations.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Jupiter</h3>
+        <p>The Jupiter placement brings expansion, growth, and new opportunities. It influences areas where you'll experience abundance, learning, and positive development. This card reveals where you might receive blessings, gain wisdom, or experience fortunate circumstances.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Saturn</h3>
+        <p>The Saturn placement presents lessons, responsibilities, and areas requiring discipline. It influences where you'll need to establish boundaries, create structure, or face limitations. This card reveals challenges that will ultimately strengthen you through patience and perseverance.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Uranus</h3>
+        <p>The Uranus placement brings unexpected changes, innovation, and liberation. It influences areas where you'll experience breakthroughs, disruptions, or sudden insights. This card reveals where you might break free from old patterns, embrace originality, or encounter surprising developments.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Neptune</h3>
+        <p>The Neptune placement affects your dreams, intuition, and spiritual awareness. It influences areas where boundaries dissolve, imagination flourishes, or confusion might arise. This card reveals where you'll connect with the intangible, experience compassion, or need to distinguish between illusion and reality.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Pluto</h3>
+        <p>The Pluto placement triggers profound transformation and reveals hidden truths. It influences areas where you'll experience powerful change, regeneration, or the surfacing of subconscious material. This card reveals where deep healing can occur through releasing what no longer serves you.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Result</h3>
+        <p>The Result placement shows the outcome of navigating the Pluto card's transformative energy. It represents what emerges after embracing change and doing the necessary inner work. This card reveals the rewards or new state of being that becomes possible through transformation.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Peak</h3>
+        <p>The Peak placement represents the highest potential or achievement possible during this yearly cycle. It shows the culmination of your efforts and the pinnacle experience available to you. This card reveals what you can aspire to and the crowning glory of your year.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Moon</h3>
+        <p>The Moon placement reflects your emotional landscape and subconscious patterns. It influences your intuitive responses, feelings, and inner world. This card reveals the emotional themes of the year and how you'll process experiences on a feeling level.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Earth/Transformation</h3>
+        <p>The Earth/Transformation placement represents the grounding force and practical manifestation of all other energies. It shows how the year's lessons will be integrated into your life in tangible ways. This card reveals the ultimate transformation that occurs when all other energies are harmonized and embodied.</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page Break -->
+  <div class="page-break"></div>
+  
+  <!-- Analysis Content -->
+  {% if content %}
+  <div class="section">
+    <h2>Analysis</h2>
+    <div class="analysis-content">
+      {{ content | markdown | safe }}
+    </div>
+  </div>
+  {% endif %}
+  
+  <!-- Cardology Karma Section -->
+  <div class="section">
+    <h2>Cardology Karma</h2>
+    <p>
+      In Cardology, karmas represent the energetic signatures associated with each card. These signatures shape the events, experiences, and opportunities that manifest on any given day. The concept of karmas in Cardology bears a striking resemblance to the ancient Egyptian calendar of good and bad days, which outlined specific experiences and advised on the favorability of initiating new ventures.
+    </p>
+    <p>
+      Each card carries its own unique set of karmas, both positive and negative. These karmas influence the day's events when a particular card is active. For example, a day governed by the Jack of Clubs might bring experiences such as financial concerns, increased risk of car-related issues, intellectual debates, job-related anxieties, or recognition for knowledge and expertise.
+    </p>
+    <p>
+      It's important to understand that anything born or created on a particular day inherits the birthday of that day, along with its corresponding card and all associated karmas. This concept explains many of life's seeming inconsistencies and offers a blueprint for crafting a more harmonious life.
+    </p>
+    <p>
+      The karmas listed for each card in your yearly spread represent potential experiences, both positive and negative, that you may encounter during the period influenced by that card. By being aware of these potential influences, you can better navigate challenges and capitalize on opportunities as they arise.
+    </p>
+    <p>
+      Remember, while karmas suggest potential experiences, your free will and personal choices play a significant role in how these energies manifest in your life. Use this knowledge as a tool for self-awareness and personal growth rather than as a deterministic forecast.
+    </p>
+    
+    <div class="karma-cards">
+      {% for card_position in spread_with_positions %}
+        <div class="karma-card">
+          <h3>{{ card_position.position }} - {{ card_position.symbol }}</h3>
+          
+          <div class="positive-experiences">
+            <h4>Positive Experiences</h4>
+            <ul>
+              {% for experience in card_position.karma["Positive Experiences"] %}
+                <li>{{ experience }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          
+          <div class="negative-experiences">
+            <h4>Negative Experiences</h4>
+            <ul>
+              {% for experience in card_position.karma["Negative Experiences"] %}
+                <li>{{ experience }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  
+  
+  <!-- Debug Section (Admin Only) -->
+  {% if is_admin %}
+  <div class="page-break"></div>
+  <div class="section">
+    <h2>Debug Information (Admin Only)</h2>
+    
+    <style>
+      .debug-section {
+        margin-bottom: 30px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f5f5f5;
+      }
+      
+      .debug-step {
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      
+      .debug-step.completed {
+        background-color: #e8f5e9;
+        border-left: 5px solid #4CAF50;
+      }
+      
+      .debug-step.failed {
+        background-color: #ffebee;
+        border-left: 5px solid #F44336;
+      }
+      
+      .debug-step.started {
+        background-color: #e3f2fd;
+        border-left: 5px solid #2196F3;
+      }
+      
+      .debug-step h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      
+      .debug-step-status {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-left: 10px;
+      }
+      
+      .debug-step-status.completed {
+        background-color: #4CAF50;
+        color: white;
+      }
+      
+      .debug-step-status.failed {
+        background-color: #F44336;
+        color: white;
+      }
+      
+      .debug-step-status.started {
+        background-color: #2196F3;
+        color: white;
+      }
+      
+      .debug-result {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      
+      .debug-error {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #ffebee;
+        border-radius: 4px;
+        color: #b71c1c;
+      }
+      
+      .code-block {
+        background-color: #f5f5f5;
+        padding: 10px;
+        border-radius: 4px;
+        font-family: monospace;
+        white-space: pre-wrap;
+        overflow-x: auto;
+      }
+    </style>
+    
+    <!-- Input Section -->
+    <div class="debug-section">
+      <h3>Input Data</h3>
+      <div class="code-block">{{ debug_info.input | json }}</div>
+    </div>
+    
+    <!-- Steps Section -->
+    <h3>Report Generation Steps</h3>
+    {% for step in debug_info.steps %}
+      <div class="debug-step {{ step.status }}">
+        <h4>
+          Step {{ loop.index }}: {{ step.step }}
+          <span class="debug-step-status {{ step.status }}">{{ step.status }}</span>
+        </h4>
+        
+        {% if step.status == 'completed' %}
+          {% if step.step == 'Calculate birth cards' %}
+            <h4>Birth Cards:</h4>
+            <div class="card-container">
+              {% for card in step.result %}
+                <div class="card {{ card.suit|lower }}">
+                  <div class="card-top-left">{{ card.value }}</div>
+                  <div class="card-center">{{ card.symbol }}</div>
+                  <div class="card-bottom-right">{{ card.value }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          {% elif step.step == 'Calculate year cards and displacing card' %}
+            <h4>Year Cards:</h4>
+            <div class="card-container">
+              {% for card in step.result.yearCards %}
+                <div class="card {{ card.suit|lower }}">
+                  <div class="card-top-left">{{ card.value }}</div>
+                  <div class="card-center">{{ card.symbol }}</div>
+                  <div class="card-bottom-right">{{ card.value }}</div>
+                </div>
+              {% endfor %}
+            </div>
+            
+            <h4>Displacing Card:</h4>
+            <div class="card-container">
+              <div class="card {{ step.result.displacingCard.suit|lower }}">
+                <div class="card-top-left">{{ step.result.displacingCard.value }}</div>
+                <div class="card-center">{{ step.result.displacingCard.symbol }}</div>
+                <div class="card-bottom-right">{{ step.result.displacingCard.value }}</div>
+              </div>
+            </div>
+            
+            <h4>Yearly Spread:</h4>
+            <div class="code-block">{{ step.result.yearlySpread | json }}</div>
+            
+            <h4>Positions:</h4>
+            <div class="code-block">{{ step.result.positions | json }}</div>
+          {% elif step.step == 'Get card descriptions and keywords' %}
+            <h4>Birth Card Description:</h4>
+            <p>{{ step.result.birthCardDescriptions[0] }}</p>
+            
+            <h4>Birth Card Keywords:</h4>
+            <ul>
+              {% for keyword in step.result.birthCardKeywords[0] %}
+                <li>{{ keyword }}</li>
+              {% endfor %}
+            </ul>
+            
+            <h4>Year Card Descriptions:</h4>
+            <div class="code-block">{{ step.result.yearCardDescriptions | json }}</div>
+            
+            <h4>Displacing Card Description:</h4>
+            <p>{{ step.result.displacingCardDescription }}</p>
+          {% elif step.step == 'Get karma information for each card' %}
+            <h4>Cards Data:</h4>
+            <p>Cards data loaded: {{ step.cardsDataLoaded }}</p>
+            <p>Cards data length: {{ step.cardsDataLength }}</p>
+          {% elif step.step == 'Create spread with positions and karma information' %}
+            <h4>Spread with Positions:</h4>
+            {% for position in step.result %}
+              <div class="debug-result">
+                <h5>{{ position.position }} - {{ position.symbol }}</h5>
+                <p><strong>Card:</strong> {{ position.name }}</p>
+                <p><strong>Description:</strong> {{ position.description }}</p>
+                
+                <div class="karma-section">
+                  <h4>Karma:</h4>
+                  
+                  <div class="positive-experiences">
+                    <h4>Positive Experiences:</h4>
+                    <ul>
+                      {% for experience in position.karma["Positive Experiences"] %}
+                        <li>{{ experience }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  
+                  <div class="negative-experiences">
+                    <h4>Negative Experiences:</h4>
+                    <ul>
+                      {% for experience in position.karma["Negative Experiences"] %}
+                        <li>{{ experience }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              {% if not loop.last %}
+                <hr>
+              {% endif %}
+            {% endfor %}
+          {% elif step.step == 'Generate yearly influences, recommendations, and key dates' %}
+            <h4>Yearly Influences:</h4>
+            <ul>
+              {% for influence in step.result.yearlyInfluences %}
+                <li><strong>{{ influence.title }}:</strong> {{ influence.description }}</li>
+              {% endfor %}
+            </ul>
+            
+            <h4>Recommendations:</h4>
+            <ul>
+              {% for recommendation in step.result.recommendations %}
+                <li>{{ recommendation }}</li>
+              {% endfor %}
+            </ul>
+            
+            <h4>Key Dates:</h4>
+            <ul>
+              {% for date in step.result.keyDates %}
+                <li><strong>{{ date.date }}:</strong> {{ date.description }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <div class="debug-result">
+              <pre>{{ step.result | json }}</pre>
+            </div>
+          {% endif %}
+        {% elif step.status == 'failed' %}
+          <div class="debug-error">
+            <p><strong>Error:</strong> {{ step.error }}</p>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    
+    <!-- Errors Section -->
+    {% if debug_info.errors and debug_info.errors|length > 0 %}
+      <div class="debug-section">
+        <h3>Errors</h3>
+        {% for error in debug_info.errors %}
+          <div class="debug-error">
+            <p><strong>Step:</strong> {{ error.step }}</p>
+            <p><strong>Message:</strong> {{ error.message }}</p>
+            <p><strong>Stack:</strong></p>
+            <pre>{{ error.stack }}</pre>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  <!-- Footer is included in the cover page -->
+{% endblock %}

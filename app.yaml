@@ -1,0 +1,54 @@
+name: report-writer
+region: nyc
+features:
+  - buildpack-stack=ubuntu-22
+
+services:
+  - name: api
+    environment_slug: node-js
+    source_dir: report-writer-new/server
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    routes:
+      - path: /api
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "8080"
+      - key: DATABASE_FILE
+        value: "./data/database.json"
+      - key: PDF_OUTPUT_DIR
+        value: "output"
+      - key: JWT_SECRET
+        type: SECRET
+      - key: OPENAI_API_KEY
+        type: SECRET
+      - key: ADMIN_USERNAME
+        type: SECRET
+      - key: ADMIN_PASSWORD
+        type: SECRET
+    build_command: npm install
+    run_command: npm start
+
+static_sites:
+  - name: client
+    source_dir: report-writer-new/client
+    output_dir: dist
+    index_document: index.html
+    error_document: index.html
+    routes:
+      - path: /
+    envs:
+      - key: VITE_API_URL
+        value: ${APP_URL}
+    build_command: npm install && npm run build
+
+# Optional: Add a managed database if needed
+# databases:
+#   - name: db
+#     engine: PG
+#     version: "15"
+#     size: db-s-dev-database
+#     num_nodes: 1

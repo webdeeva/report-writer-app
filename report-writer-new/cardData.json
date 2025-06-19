@@ -1,0 +1,314 @@
+{
+"A♥": {
+    "position": "Jupiter / Uranus",
+    "keywords": "New Love, New Baby, Hugs, Affectionate, Loving, New Entrepreneurial Ideas, Selfishness, Worry, Flightiness, Greed, Creative, Artistic, Faithful or Doubtful, Emotional instability",
+    "dates": "December 30",
+    "staticData": ["A♦", "A♥", "30"]
+},
+"2♥": {
+    "position": "Venus / Neptune",
+    "keywords": "Union, Soulmates, Romantic Couple, Marriage, Lovebirds, Thirst for knowledge, Fear of being alone, Obsessive need for close relationships, Intelligence, Need for security, A need to know, Curiosity",
+    "dates": "December 29",
+    "staticData": ["A♣", "2♥", "17"]
+},
+"3♥": {
+    "position": "Mercury / Mercury",
+    "keywords": "Twins or multiple children, an open relationship, and affair, emotional immaturity, inability to choose where to place one's affections or trust, childlike joy, curiosity in love, bisexuality, exercising one's options, interracial dating or love",
+    "dates": "November 30, December 28",
+    "staticData": ["A♥", "3♥", "4"]
+},
+"4♥": {
+    "position": "Neptune / Mercury",
+    "keywords": "Family, Roots, Ancestry or Ancestors, Protection in relationships, Home, Hospitality, Accommodating, Friendly, Ruthless, Preachy",
+    "dates": "October 31, November 29, December 27",
+    "staticData": ["4♠", "4♥", "46"]
+},
+"5♥": {
+    "position": "Saturn / Venus",
+    "keywords": "Free loving, Fickle, Creative, Charitable, Restless, Faithful, Worrisome, Anxious, Insecure or Unsure, Contrarian, Hypocritical, Homeless, Traveling, Vacation, Runaway, Unorthodox, Non-conforming, Commitment phobia, Bad breakup or divorce",
+    "dates": "October 30, November 28, December 26",
+    "staticData": ["5♥", "4♣", "8"]
+},
+"6♥": {
+    "position": "Mars / Mars",
+    "keywords": "Peaceful, Past-life Relationships, Reunion, Karmic Relationships, Competitiveness, Grandeur, Dishonesty, Initiation, Juggling work, Having rich, successful, or famous associates, Partnership with women or lovers",
+    "dates": "October 29, November 27, December 25",
+    "staticData": ["4♣", "6♥", "20"]
+},
+"7♥": {
+    "position": "Venus / Mercury",
+    "keywords": "Boundaries, Betrayal, Relationship drama, Control-freak, Unconditional love, Veganism, Strict Diet, Digestion problems, Surgery, Weight Loss, Business Mogul or Tycoon",
+    "dates": "September 30, October 28, November 26, December 24",
+    "staticData": ["8♥", "7♥", "11"]
+},
+"8♥": {
+    "position": "Neptune / Jupiter",
+    "keywords": "Playboy/Playgirl, Power in love, Socialite, Massage therapist, Touch Healer, Reiki, Psychic, Bullying, Heartbreaker, Success in Work, charismatic",
+    "dates": "August 31, September 29, October 27, November 25, December 23",
+    "staticData": ["7♠", "8♥", "49"]
+},
+"9♥": {
+    "position": "Saturn / Saturn",
+    "keywords": "Counselor/Therapist/Therapy, A Wish, Apology, Heartbreak, Grief, Divorce, Pet",
+    "dates": "August 30, September 28, October 26, November 24, December 22",
+    "staticData": ["7♦", "9♥", "36"]
+},
+"10♥": {
+    "position": "Jupiter / Mars",
+    "keywords": "Personal & Social Success, Networking, Party, Wedding, Wealth & Abundance, Successfully overcoming challenges, Hospital, Hotel, Wishes come true, Large Family",
+    "dates": "July 31, August 29, September 27, October 25, November 23, December 21",
+    "staticData": ["J♣", "10♥", "27"]
+},
+"J♥": {
+    "position": "Venus / Jupiter",
+    "keywords": "Sacrifice, Spiritual love, Jesus, Children, Day Care, Loan Shark, Stripper, Suicide, Pastor, Sex addict, Stubborn, Charmer",
+    "dates": "July 30, August 28, September 26, October 24, November 22, December 20",
+    "staticData": ["J♥", "J♥", "14"]
+},
+"Q♥": {
+    "position": "Neptune / Neptune",
+    "keywords": "Motherhood, Pregnancy, Royalty, Political, Teacher, Socialite, Sex, Drugs, Addiction, Laziness, Weight Gain, Sugar cravings",
+    "dates": "July 29, August 27, September 25, October 23, November 21, December 19",
+    "staticData": ["10♠", "Q♥", "52"]
+},
+"K♥": {
+    "position": "Mars / Mercury",
+    "keywords": "Fatherhood, Performer, Actor, Head of a large family, Patriarch, Passionate about family, Successful, Well-loved, Temper-mental, Bullying, Trolling",
+    "dates": "June 30, July 28, August 26, September 24, October 22, November 20, December 18",
+    "staticData": ["2♣", "K♥", "18"]
+},
+"A♣": {
+    "position": "Mercury / Venus",
+    "keywords": "New Goal, New Project, Curiosity, Questions, Chatter or communication, Website, Mobile app, New high tech item, Library, Computer virus, Relationship, invasion of privacy, stalking, investigation",
+    "dates": "May 31, June 29, July 27, August 25, September 23, October 21, November 19, December 17",
+    "staticData": ["2♥", "A♣", "5"]
+},
+"2♣": {
+    "position": "Uranus / Saturn",
+    "keywords": "Communication, Argument, Fears, Friendship, Debate, Exchange of knowledge, Fight, sharing ideas",
+    "dates": "May 30, June 28, July 26, August 24, September 22, October 20, November 18, December 16",
+    "staticData": ["A♠", "2♣", "43"]
+},
+"3♣": {
+    "position": "Saturn / Mars",
+    "keywords": "The Writer, Creativity, Worry, Anxiety, Indecision, Magnetic, Entertaining, Artistic ability, Musical ability, Negativity, Skepticism",
+    "dates": "May 29, June 27, July 25, August 23, September 21, October 19, November 17, December 15",
+    "staticData": ["5♦", "3♣", "34"]
+},
+"4♣": {
+    "position": "Mars / Jupiter",
+    "keywords": "Common Sense, Mental Peace, Intelligence, Obsessive, Stubborn, Debater, Fixed Ideas, Decoder",
+    "dates": "April 30, May 28, June 26, July 24, August 22, September 20, October 18, November 16, December 14",
+    "staticData": ["5♣", "4♣", "21"]
+},
+"5♣": {
+    "position": "Mercury / Saturn",
+    "keywords": "Adventurer, Wanderlust, Conversational, Passionate, Debater, Spontaneous, Secretive, Impatient, Overly Concerned with Finances, Creative with money, Independent, Emotionally Sensitive, Intelligent, Explosive",
+    "dates": "March 31, April 29, May 27, June 25, July 23, August 21, September 19, October 17, November 15, December 13",
+    "staticData": ["5♥", "4♣", "8"]
+},
+"6♣": {
+    "position": "Neptune / Saturn",
+    "keywords": "Compromising, Mediator, Nostalgic, The Messenger, Intuitive, Inventive, Creative, Well-connected, Successful, Sensitive, Popular, Dutiful, Easy-going, Slow Starters",
+    "dates": "March 30, April 28, May 26, June 24, July 22, August 20, September 18, October 16, November 14, December 12",
+    "staticData": ["8♠", "6♣", "50"]
+},
+"7♣": {
+    "position": "Saturn / Uranus",
+    "keywords": "Genius, Creative, Scandal, Hard-working, Prayer, Faith, Positive mantras, Humanitarian, Wise, Popular, Self-hexing, Negativity, Curses, Slander, Pessimism & Doubt",
+    "dates": "March 29, April 27, May 25, June 23, July 21, August 19, September 17, October 15, November 13, December 11",
+    "staticData": ["8♦", "7♣", "37"]
+},
+"8♣": {
+    "position": "Mars / Neptune",
+    "keywords": "Fixed thinking, Mental fixations, Success, Creativity, Quick learning, Brilliance, Talented, Magnetism, Musical, Photogenic, Stuck, Slow decisions",
+    "dates": "March 28, April 26, May 24, June 22, July 20, August 18, September 16, October 14, November 12, December 10",
+    "staticData": ["8♣", "8♣", "24"]
+},
+"9♣": {
+    "position": "Venus / Saturn",
+    "keywords": "Graduation, Intelligent, Mentally Inspiring, Passionate about family, Guru, Family Court, Family Drama, Procrastination, Laziness, Depression",
+    "dates": "January 31, February 29, March 27, April 25, May 23, June 21, July 19, August 17, September 15, October 13, November 11, December 9",
+    "staticData": ["Q♥", "9♣", "15"]
+},
+"10♣": {
+    "position": "Sun / Pluto",
+    "keywords": "Teaching or teacher, conferences, politics or elections, doors opening to progress, success in communications, success with groups, recording studios",
+    "dates": "January 30, February 28, March 26, April 24, May 22, June 20, July 18, August 16, September 14, October 12, November 10, December 8",
+    "staticData": ["J♠", "10♣", "1"]
+},
+"J♣": {
+    "position": "Uranus / Venus",
+    "keywords": "Speaking your truth with authority (and becoming an authority in it), Nimble mind and tongue, hip hop and spoken word, rising above poverty and becoming a philanthropist, creative thought, dishonesty",
+    "dates": "January 29, February 27, March 25, April 23, May 21, June 19, July 17, August 15, September 13, October 11, November 9, December 7",
+    "staticData": ["J♦", "J♣", "40"]
+},
+"Q♣": {
+    "position": "Mercury / Mars",
+    "keywords": "Service to children or mother to world, singer, emotionally sensitive, impatient, secretive, intuitive, creative, busy, organizational, restless, receptive, hard working",
+    "dates": "January 28, February 26, March 24, April 22, May 20, June 18, July 16, August 14, September 12, October 10, November 8, December 6",
+    "staticData": ["3♥", "Q♣", "6"]
+},
+"K♣": {
+    "position": "Uranus / Uranus",
+    "keywords": "Master teacher, mental downloads, recognition for your knowledge, mentor, anger, law enforcement, sensory pleasures (food,drink,drugs, or sex), father figure, snappy tongue or witty humorous, abusive, in women -- a great deal of attractiveness, makeup and beauty products",
+    "dates": "January 27, February 25, March 23, April 21, May 19, June 17, July 15, August 13, September 11, October 9, November 7, December 5",
+    "staticData": ["2♠", "K♣", "44"]
+},
+"A♦": {
+    "position": "Jupiter / Neptune",
+    "keywords": "New job, business, or project. New material passion or possession. Wealth, ambition, greed, impatience, stubbornness, luck, recklessness",
+    "dates": "January 26, February 24, March 22, April 20, May 18, June 16, July 14, August 12, September 10, October 8, November 6, December 4",
+    "staticData": ["2♦", "A♦", "31"]
+},
+"2♦": {
+    "position": "Mars / Saturn",
+    "keywords": "Meetings, business partnerships, coaches/coaching, a contract or business agreement, roommate, project manager",
+    "dates": "January 25, February 23, March 21, April 19, May 17, June 15, July 13, August 11, September 9, October 7, November 5, December 3",
+    "staticData": ["6♣", "2♦", "22"]
+},
+"3♦": {
+    "position": "Mercury / Uranus",
+    "keywords": "Financial creativity, financial worries, multiple businesses or money-making ventures, anxiety, short patience, celebrity, interest in the occult, film, music or entertainment projects.",
+    "dates": "January 24, February 22, March 20, April 18, May 16, June 14, July 12, August 10, September 8, October 6, November 4, December 2",
+    "staticData": ["6♥", "3♦", "9"]
+},
+"4♦": {
+    "position": "Uranus / Venus",
+    "keywords": "Financial stability, building a solid foundation, hard work, stubbornness, perfectionism, money from multiple sources, powerful spiritual money, defensive",
+    "dates": "January 23, February 21, March 19, April 17, May 15, June 13, July 11, August 9, September 7, October 5, November 3, December 1",
+    "staticData": ["5♠", "4♦", "47"]
+},
+"5♦": {
+    "position": "Saturn / Neptune",
+    "keywords": "Rollercoaster finances or emotions, a move to a new home or business, change at work or within the home, home renovation, investing in real estate or technology (or both), a futuristic, business travel",
+    "dates": "January 22, February 20, March 18, April 16, May 14, June 12, July 10, August 8, September 6, October 4, November 2",
+    "staticData": ["9♦", "5♦", "38"]
+},
+"6♦": {
+    "position": "Jupiter / Mercury",
+    "keywords": "Retirement, slow down in work, debt -- personal or financial, competition or competitive sports, social work, credit, honesty & integrity, keeping your word",
+    "dates": "January 21, February 19, March 17, April 15, May 13, June 11, July 9, August 7, September 5, October 3, November 1",
+    "staticData": ["9♣", "6♦", "25"]
+},
+"7♦": {
+    "position": "Venus / Venus",
+    "keywords": "Millionaire, creative, family issues or matters, spiritual money, poverty or wealth consciousness, spending a great deal of money, financial challenges, female empowerment",
+    "dates": "January 20, February 18, March 16, April 14, May 12, June 10, July 8, August 6, September 4, October 2",
+    "staticData": ["9♥", "7♦", "12"]
+},
+"8♦": {
+    "position": "Sun / Jupiter",
+    "keywords": "Power with money, promotion or management position, real estate, ruthless, fickle, perfectionism, success after hard work, obtaining a loan or funding",
+    "dates": "January 19, February 17, March 15, April 13, May 11, June 9, July 7, August 5, September 3, October 1",
+    "staticData": ["Q♠", "8♦", "2"] 
+},
+"9♦": {
+    "position": "Uranus / Mars",
+    "keywords": "Philanthropy, wealth, poverty, non-profits & charity, investing, politics, issues with driving or vehicles, issues with family, the african diaspora, spending beyond your means",
+    "dates": "January 18, February 16, March 14, April 12, May 10, June 8, July 6, August 4, September 2",
+    "staticData": ["Q♦", "9♦", "41"]
+},
+"10♦": {
+    "position": "Jupiter / Jupiter",
+    "keywords": "Windfalls, abundance, emotional extremes, attention, celebrity status, lottery winnings, psychic power",
+    "dates": "January 17, February 15, March 13, April 11, May 9, June 7,July 5, August 3, September 1",
+    "staticData": ["Q♣", "10♦", "28"]
+},
+"J♦": {
+    "position": "Uranus / Neptune",
+    "keywords": "Salesperson, clever & charming, dishonest with finances, friendly, financially successful, dreamer, ideas that are far ahead of their time, idealist",
+    "dates": "January 16, February 14, March 12, April 10, May 8, June 6, July 4, August 2",
+    "staticData": ["3♠", "J♦", "45"]
+},
+"Q♦": {
+    "position": "Saturn / Mercury",
+    "keywords": "Intuitive value system, serving with your value system, shopping, long term money, overspending, women investors. creativity, external beauty, yoga, meditation, hairdresser or hairstyle",
+    "dates": "January 15, February 13, March 11, April 9, May 7, June 5, July 3, August 1",
+    "staticData": ["3♦", "Q♦", "32"]
+},
+"K♦": {
+    "position": "Sun / Saturn",
+    "keywords": "Businessman or businesswoman, music producer, creative type but business savvy, a controlling lover, sexual person, a wealthy person",
+    "dates": "January 14, February 12, March 10, April 8, May 6, June 4, July 2",
+    "staticData": ["3♣", "K♦", "19"]
+},
+"A♠": {
+    "position": "Mercury / Neptune",
+    "keywords": "Ambition, death/rebirth, secrets, mystery, paranoia, mystery systems, occult, a new job",
+    "dates": "January 13, February 11, March 9, April 7, May 5, June 3, July 1",
+    "staticData": ["7♥", "A♠", "10"]
+},
+"2♠": {
+    "position": "Neptune / Mars",
+    "keywords": "Friendship, Life coach, Work partnership, Socialite",
+    "dates": "January 12, February 10, March 8, April 6, May 4, June 2",
+    "staticData": ["6♠", "2♠", "48"]
+},
+"3♠": {
+    "position": "Saturn / Jupiter",
+    "keywords": "Being at a crossroads, creativity, stress, overloading with work, luck, gambling, many new projects, fluctuating spiritual values",
+    "dates": "January 11, February 9, March 7, April 5, May 3, June 1",
+    "staticData": ["6♦", "3♠", "35"]
+},
+"4♠": {
+    "position": "Jupiter / Venus",
+    "keywords": "Grounded, stability, the kept woman or man, fortunate, satisfaction, ultimately obtaining what you desire",
+    "dates": "January 10, February 8, March 6, April 4, May 2",
+    "staticData": ["10♣", "4♠", "26"]
+},
+"5♠": {
+    "position": "Venus / Mars",
+    "keywords": "Driving, changes, earthquakes, traveling, restless, driving over land, adventure, stalking or being stalked",
+    "dates": "January 9, February 7, March 5, April 3, May 1",
+    "staticData": ["10♥", "5♠", "13"]
+},
+"6♠": {
+    "position": "Neptune / Uranus",
+    "keywords": "Fate/destiny, the Law of Karma or Cause and Effect, health or work issues, slow down, stuck, bound to someone or something, timing, contract or commitment, marriage",
+    "dates": "January 8, February 6, March 4, April 2",
+    "staticData": ["9♠", "6♠", "51"]
+},
+"7♠": {
+    "position": "Uranus / Jupiter",
+    "keywords": "Faith, accidents, ailments, the manifestation of dreams, spiritual work, negativity",
+    "dates": "January 7, February 5, March 3, April 1",
+    "staticData": ["K♦", "7♠", "42"]
+},
+"8♠": {
+    "position": "Jupiter / Saturn",
+    "keywords": "Overcoming obstacles by the use of will, success, power, bullying, physical exercise, gym (working out), materialism",
+    "dates": "January 6, February 4, March 2",
+    "staticData": ["K♣", "8♠", "29"]
+},
+"9♠": {
+    "position": "Venus / Uranus",
+    "keywords": "Completion of work or project, weight loss, illness, giving (especially to large groups of people)",
+    "dates": "January 5, February 3, March 1",
+    "staticData": ["K♥", "9♠", "16"]
+},
+"10♠": {
+    "position": "Mercury / Jupiter",
+    "keywords": "Success after hard work, workaholic, a major breakthrough or completion, a breakthrough leading to freedom to travel and the pursuit of happiness, extreme sensitivity (touchiness)",
+    "dates": "January 4, February 2",
+    "staticData": ["4♥", "10♠", "7"]
+},
+"J♠": {
+    "position": "Mars / Uranus",
+    "keywords": "Spiritual initiation, the beginning of a new lifestyle, creative person, actor or actress, a thief or dishonest individual, odd jobs, romantic charmer, irresponsible male, arrogance, manipulation",
+    "dates": "January 3, February 1",
+    "staticData": ["7♣", "J♠", "23"]
+},
+"Q♠": {
+    "position": "Uranus / Mercury",
+    "keywords": "Boss or management, the witch, priestess, inner work, using spiritual power to influence the material world, the grandmother, realtor or real estate, mean or harsh woman or man, self-mastery",
+    "dates": "January 2",
+    "staticData": ["10♦", "Q♠", "39"]
+},
+"K♠": {
+    "position": "Sun / Saturn", 
+    "keywords": "God, dog, perfectionist or perfectionism, mental illness or sensitivity (schizophrenia, dementia), perfection or perfectly done, gun or murder, nature, Leadership",
+    "dates": "January 1",
+    "staticData": ["K♠", "K♠", "3"]
+}
+}

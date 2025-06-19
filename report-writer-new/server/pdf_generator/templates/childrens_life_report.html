@@ -1,0 +1,497 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% endblock %}
+
+{% block styles %}
+<style>
+  @page {
+    size: letter;  /* 8.5 x 11 inches */
+    margin: 1cm;
+  }
+  
+  .life-report-header {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .cover-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .cover-title {
+    margin-top: 2cm;
+  }
+  
+  .report-logo {
+    width: 150px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .birth-card-section {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 2cm auto;
+    text-align: center;
+    max-width: 400px;
+  }
+  
+  .life-spread-section {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .card-description {
+    margin-top: 15px;
+    text-align: left;
+  }
+  
+  .card-meaning {
+    font-style: italic;
+    color: #555;
+  }
+  
+  .life-path-section {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .personality-traits {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .trait-item {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .trait-title {
+    font-weight: bold;
+    color: #800000;
+  }
+  
+  .challenges-opportunities {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .challenges, .opportunities {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .challenges h3 {
+    color: #C53030;
+  }
+  
+  .opportunities h3 {
+    color: #2F855A;
+  }
+  
+  /* Markdown styles */
+  .analysis-content h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .analysis-content h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 8px;
+  }
+  
+  .analysis-content h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 12px;
+    margin-bottom: 6px;
+  }
+  
+  .analysis-content p {
+    margin-bottom: 10px;
+  }
+  
+  .analysis-content ul {
+    margin-left: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .analysis-content li {
+    margin-bottom: 5px;
+    list-style-type: disc;
+  }
+  
+  .analysis-content strong {
+    font-weight: bold;
+  }
+  
+  .analysis-content em {
+    font-style: italic;
+  }
+  
+  /* Cardology Karma styles */
+  .karma-cards {
+    margin-top: 30px;
+  }
+  
+  .karma-card {
+    margin-bottom: 40px;
+    page-break-inside: avoid;
+  }
+  
+  .karma-card h3 {
+    color: #800000;
+    font-size: 20px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+  }
+  
+  .positive-experiences {
+    background-color: #f0f9f0;
+    border-left: 5px solid #4CAF50;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+  
+  .negative-experiences {
+    background-color: #fff0f0;
+    border-left: 5px solid #F44336;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+  
+  .positive-experiences h4, .negative-experiences h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  
+  .positive-experiences h4 {
+    color: #2E7D32;
+  }
+  
+  .negative-experiences h4 {
+    color: #C62828;
+  }
+  
+  .positive-experiences ul, .negative-experiences ul {
+    margin-left: 20px;
+    margin-bottom: 0;
+  }
+  
+  .positive-experiences li, .negative-experiences li {
+    margin-bottom: 8px;
+  }
+  
+  .page-break {
+    page-break-after: always;
+  }
+  
+  .spread-page {
+    margin-top: 1cm;
+    margin-bottom: 1cm;
+  }
+  
+  .card-divider {
+    text-align: center;
+    margin: 50px 0;
+    font-size: 24px;
+    color: #800000;
+  }
+  
+  /* Card Positions Explanation styles */
+  .positions-explanation {
+    margin-top: 20px;
+  }
+  
+  .position-item {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .position-item h3 {
+    color: #800000;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .position-item p {
+    margin-bottom: 0;
+  }
+  
+  /* Children's Life Report specific styles */
+  .childrens-header {
+    background-color: #e6f7ff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 2px solid #1890ff;
+  }
+  
+  .developmental-stages {
+    margin-top: 30px;
+  }
+  
+  .stage-item {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 5px solid #1890ff;
+  }
+  
+  .stage-item h3 {
+    color: #1890ff;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  .parenting-tips {
+    background-color: #fff8e6;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 30px;
+    border-left: 5px solid #faad14;
+  }
+  
+  .parenting-tips h3 {
+    color: #d48806;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  .parenting-tips ul {
+    margin-left: 20px;
+    margin-bottom: 0;
+  }
+  
+  .parenting-tips li {
+    margin-bottom: 8px;
+  }
+  
+  .education-section {
+    background-color: #f6ffed;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 30px;
+    border-left: 5px solid #52c41a;
+  }
+  
+  .education-section h3 {
+    color: #389e0d;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <!-- Life Spread Page (Cover Page) -->
+  <div class="cover-page">
+    {% if custom_logo %}
+      <img src="{{ custom_logo }}" alt="Custom Logo" class="report-logo">
+    {% else %}
+      <img src="logo.png" alt="Report Writer Logo" class="report-logo">
+    {% endif %}
+    <h2 class="text-center">{{ person_name }}</h2>
+    <p class="text-center">Birth Date: {{ birthdate }}</p>
+    <h1 class="text-center">Children's Life Report</h1>
+    <h3 class="text-center">Life Spread</h3>
+    
+    {% if custom_footer %}
+      <div class="custom-footer" style="margin-top: 1em;">
+        {{ custom_footer | markdown | safe }}
+      </div>
+    {% endif %}
+    <div class="life-spread-section" style="padding: 10px; margin-bottom: 10px;">
+      <div class="card-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 600px; margin: 0 auto;">
+        {% for position in spread_with_positions %}
+          <div style="flex: 0 0 auto; margin: 5px;">
+            <div class="card {{ position.card.suit|lower }}" style="width: 60px; height: 90px;">
+              <div class="card-top-left">{{ position.card.value }}</div>
+              <div class="card-center">{{ position.card.symbol }}</div>
+              <div class="card-bottom-right">{{ position.card.value }}</div>
+            </div>
+            <div class="card-placement" style="font-size: 10px;">{{ position.position }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page Break -->
+  <div class="page-break"></div>
+  
+  <!-- Introduction to Children's Life Report -->
+  <div class="section">
+    <div class="childrens-header">
+      <h2 class="text-center">A Guide for Parents</h2>
+      <p>This Children's Life Report is designed to provide insights into your child's unique personality, natural tendencies, strengths, and potential challenges. By understanding these aspects, you can better support their development and help them navigate life's journey with confidence and resilience.</p>
+      <p>The information in this report is based on your child's birth cards and life spread, which reveal the energetic patterns they were born with. These patterns influence their temperament, learning style, emotional needs, and potential life path.</p>
+      <p>Remember that while these insights can be valuable guides, each child is unique and will express these energies in their own way. Use this report as a tool to enhance your understanding and support of your child's individual journey.</p>
+    </div>
+  </div>
+  
+  <!-- Card Positions Explanation Page -->
+  <div class="section">
+    <h2 class="text-center">Understanding Card Positions</h2>
+    <p>Each position in your child's life spread represents a different area of influence in their life. Understanding these positions provides context for interpreting the cards that appear in them and how they may shape your child's development.</p>
+    
+    <div class="positions-explanation">
+      <div class="position-item">
+        <h3>Sun</h3>
+        <p>The Sun placement represents your child's core identity and vital energy. It illuminates their primary focus and the central theme that drives their experiences. This card reveals how they express themselves and where their life force is directed.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Mercury</h3>
+        <p>The Mercury placement governs your child's communication, thinking patterns, and intellectual pursuits. It influences how they process information, express ideas, and connect with others through words and thoughts. This card reveals their mental themes and communication style.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Venus</h3>
+        <p>The Venus placement shapes your child's relationships, values, and what they find beautiful or pleasurable. It influences their approach to friendship, harmony, and aesthetics. This card reveals how they connect with others emotionally and what they're drawn to or appreciate.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Mars</h3>
+        <p>The Mars placement determines your child's drive, ambition, and how they assert themselves. It influences their energy levels, passion, and approach to challenges. This card reveals how they take action, pursue desires, and handle conflicts or competitive situations.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Jupiter</h3>
+        <p>The Jupiter placement brings expansion, growth, and new opportunities. It influences areas where your child experiences abundance, learning, and positive development. This card reveals where they might receive blessings, gain wisdom, or experience fortunate circumstances.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Saturn</h3>
+        <p>The Saturn placement presents lessons, responsibilities, and areas requiring discipline. It influences where your child needs to establish boundaries, create structure, or face limitations. This card reveals challenges that will ultimately strengthen them through patience and perseverance.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Uranus</h3>
+        <p>The Uranus placement brings unexpected changes, innovation, and liberation. It influences areas where your child experiences breakthroughs, disruptions, or sudden insights. This card reveals where they might break free from old patterns, embrace originality, or encounter surprising developments.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Neptune</h3>
+        <p>The Neptune placement affects your child's dreams, intuition, and spiritual awareness. It influences areas where boundaries dissolve, imagination flourishes, or confusion might arise. This card reveals where they connect with the intangible, experience compassion, or need to distinguish between illusion and reality.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Pluto</h3>
+        <p>The Pluto placement triggers profound transformation and reveals hidden truths. It influences areas where your child experiences powerful change, regeneration, or the surfacing of subconscious material. This card reveals where deep healing can occur through releasing what no longer serves them.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Result</h3>
+        <p>The Result placement shows the outcome of navigating the Pluto card's transformative energy. It represents what emerges after embracing change and doing the necessary inner work. This card reveals the rewards or new state of being that becomes possible through transformation.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Peak</h3>
+        <p>The Peak placement represents the highest potential or achievement possible in your child's life. It shows the culmination of their efforts and the pinnacle experience available to them. This card reveals what they can aspire to and the crowning glory of their life.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Moon</h3>
+        <p>The Moon placement reflects your child's emotional landscape and subconscious patterns. It influences their intuitive responses, feelings, and inner world. This card reveals the emotional themes of their life and how they process experiences on a feeling level.</p>
+      </div>
+      
+      <div class="position-item">
+        <h3>Earth/Transformation</h3>
+        <p>The Earth/Transformation placement represents the grounding force and practical manifestation of all other energies. It shows how life's lessons will be integrated into your child's life in tangible ways. This card reveals the ultimate transformation that occurs when all other energies are harmonized and embodied.</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page Break -->
+  <div class="page-break"></div>
+  
+  <!-- Analysis Content -->
+  {% if content %}
+  <div class="section">
+    <h2>Analysis</h2>
+    <div class="analysis-content">
+      {{ content | markdown | safe }}
+    </div>
+  </div>
+  {% endif %}
+  
+  <!-- Cardology Karma Section -->
+  <div class="section">
+    <h2>Cardology Influences</h2>
+    <p>
+      In Cardology, each card carries its own unique set of influences that shape experiences and opportunities. For children, these influences can manifest in their behavior, learning style, social interactions, and emotional responses.
+    </p>
+    <p>
+      Understanding these influences can help parents and caregivers provide appropriate guidance and support. By recognizing your child's natural tendencies, you can create environments and experiences that nurture their strengths while helping them navigate challenges.
+    </p>
+    <p>
+      The influences listed for each card in your child's life spread represent potential experiences, both positive and challenging, that they may encounter in the areas of life influenced by that card. By being aware of these potential influences, you can better support their development and help them thrive.
+    </p>
+    <p>
+      Remember, while these influences suggest potential experiences, each child is unique and will express these energies in their own way. Use this knowledge as a tool for understanding and supporting your child's individual journey.
+    </p>
+    
+    <div class="karma-cards">
+      {% for card_position in spread_with_positions %}
+        <div class="karma-card">
+          <h3>{{ card_position.position }} - {{ card_position.symbol }}</h3>
+          
+          <div class="positive-experiences">
+            <h4>Positive Influences</h4>
+            <ul>
+              {% for experience in card_position.karma["Positive Experiences"] %}
+                <li>{{ experience }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          
+          <div class="negative-experiences">
+            <h4>Challenging Influences</h4>
+            <ul>
+              {% for experience in card_position.karma["Negative Experiences"] %}
+                <li>{{ experience }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <p>Generated on {{ generated_date | formatDate }} | Report Writer</p>
+{% endblock %}
