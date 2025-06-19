@@ -6,6 +6,10 @@ features:
 services:
   - name: api
     environment_slug: node-js
+    github:
+      repo: webdeeva/report-writer-app
+      branch: main
+      deploy_on_push: true
     source_dir: report-writer-new/server
     http_port: 8080
     instance_count: 1
@@ -34,6 +38,10 @@ services:
 
 static_sites:
   - name: client
+    github:
+      repo: webdeeva/report-writer-app
+      branch: main
+      deploy_on_push: true
     source_dir: report-writer-new/client
     output_dir: dist
     index_document: index.html
