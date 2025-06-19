@@ -7,6 +7,14 @@ import { fileURLToPath } from 'url';
 // Load environment variables
 dotenv.config();
 
+// Log environment variables status (for debugging)
+console.log('Environment check:', {
+  NODE_ENV: process.env.NODE_ENV,
+  PORT: process.env.PORT,
+  JWT_SECRET: process.env.JWT_SECRET ? 'SET' : 'NOT SET',
+  OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? 'SET' : 'NOT SET'
+});
+
 // Get the directory name (ES modules don't have __dirname)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

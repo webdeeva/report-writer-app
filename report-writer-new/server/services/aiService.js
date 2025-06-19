@@ -267,8 +267,13 @@ const generateReportContent = async (prompt, options = {}) => {
   // Get API key from environment
   const apiKey = process.env.OPENROUTER_API_KEY;
   
+  if (!apiKey) {
+    throw new Error('OPENROUTER_API_KEY environment variable is not set');
+  }
+  
   console.log('Using OpenRouter API key from environment');
-  console.log('API Key length:', apiKey.length);
+  console.log('API Key length:', apiKey ? apiKey.length : 'undefined');
+  console.log('API Key prefix:', apiKey ? apiKey.substring(0, 10) + '...' : 'undefined');
   
   // Determine which API to use
   const isOpenRouter = true; // Using OpenRouter API
