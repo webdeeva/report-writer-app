@@ -1,10 +1,6 @@
-import axios from 'axios';
+import axios from '../config/axios';
 
-// In production, use relative URLs (empty string)
-// In development, use the configured URL or localhost
-const API_URL = import.meta.env.VITE_API_URL !== undefined 
-  ? import.meta.env.VITE_API_URL 
-  : (import.meta.env.DEV ? 'http://localhost:8080' : '');
+// No need for API_URL since axios is already configured with baseURL
 
 // Response types
 export interface LoginResponse {
@@ -23,7 +19,7 @@ export interface LoginResponse {
  */
 export const loginUser = async (username: string, password: string): Promise<LoginResponse> => {
   try {
-    const response = await axios.post(`${API_URL}/api/auth/login`, {
+    const response = await axios.post('/api/auth/login', {
       username,
       password,
     });
@@ -50,7 +46,7 @@ export const getUserProfile = async () => {
       throw new Error('No authentication token found');
     }
     
-    const response = await axios.get(`${API_URL}/api/auth/profile`, {
+    const response = await axios.get('/api/auth/profile', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -74,7 +70,7 @@ export const createAuthenticatedAxios = () => {
   const token = localStorage.getItem('authToken');
   
   return axios.create({
-    baseURL: API_URL,
+    baseURL: '/api',
     headers: {
       Authorization: token ? `Bearer ${token}` : '',
       'Content-Type': 'application/json',
