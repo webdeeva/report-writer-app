@@ -264,14 +264,14 @@ const generateReportContent = async (prompt, options = {}) => {
     maxTokens = 4000 
   } = options;
   
-  // Hardcoded API key for testing
-  const apiKey = "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";
+  // Get API key from environment
+  const apiKey = process.env.OPENROUTER_API_KEY;
   
-  console.log('Using hardcoded API key');
+  console.log('Using OpenRouter API key from environment');
   console.log('API Key length:', apiKey.length);
   
   // Determine which API to use
-  const isOpenRouter = true; // Since we're using a hardcoded OpenRouter API key
+  const isOpenRouter = true; // Using OpenRouter API
   const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
   
   console.log('Using API: OpenRouter');
