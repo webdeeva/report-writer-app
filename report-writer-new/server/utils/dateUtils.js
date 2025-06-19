@@ -12,6 +12,11 @@ import { format } from 'date-fns';
  */
 export const parseDate = (dateStr, useLocal = false) => {
   try {
+    console.log(`parseDate called with: dateStr="${dateStr}", useLocal=${useLocal}`);
+    
+    if (!dateStr) {
+      throw new Error('Date string is required');
+    }
     // For YYYY-MM-DD format
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
       const [year, month, day] = dateStr.split('-').map(Number);

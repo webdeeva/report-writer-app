@@ -141,9 +141,11 @@ export const generateYearlyReportData = async (person, age = null) => {
 export const generateLifeReportData = async (person) => {
   try {
     console.log(`Starting life report data generation for ${person.name}`);
+    console.log(`Person object:`, JSON.stringify(person, null, 2));
     
     // Use originalDateFormat if available otherwise use birthdate
     const birthdateToUse = person.originalDateFormat || person.birthdate;
+    console.log(`Using birthdate: ${birthdateToUse} (originalDateFormat: ${person.originalDateFormat}, birthdate: ${person.birthdate})`);
 
     // Calculate birth cards
     const birthCards = await calculateBirthCards(birthdateToUse);
