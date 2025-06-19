@@ -14,10 +14,11 @@ const readFile = promisify(fs.readFile);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Path to the data files
-const CARD_BIRTHS_PATH = path.join(__dirname, '../../../../Card_Births.csv');
-const SPREADS_JSON_PATH = path.join(__dirname, '../../../../spreads.json');
-const CARDS_JSON_PATH = path.join(__dirname, '../../../../cards.json');
+// Path to the data files - relative to server root
+const DATA_DIR = path.join(__dirname, '../../data');
+const CARD_BIRTHS_PATH = path.join(DATA_DIR, 'Card_Births.csv');
+const SPREADS_JSON_PATH = path.join(DATA_DIR, 'spreads.json');
+const CARDS_JSON_PATH = path.join(DATA_DIR, 'cards.json');
 
 // Cache for data
 let cardBirthsCache = null;
