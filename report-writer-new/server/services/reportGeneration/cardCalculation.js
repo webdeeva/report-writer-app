@@ -16,6 +16,12 @@ import { findCardPositionInSpread, get13CardSpread, parseCardSymbol } from './ca
  * @returns {Promise<Array>} Array of birth cards (usually 1 card)
  */
 export const calculateBirthCards = async (birthdate) => {
+  console.log(`calculateBirthCards called with birthdate: ${birthdate}`);
+  
+  if (!birthdate) {
+    throw new Error('Birthdate is required for birth card calculation');
+  }
+  
   // Parse the date using date-fns with useLocal=true to avoid timezone issues
   const date = parseDate(birthdate, true);
   
