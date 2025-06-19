@@ -62,7 +62,8 @@ export async function generatePdfFromHtml(html, outputFilename, css = '') {
       body: JSON.stringify({
         html: html,
         css: css || '',
-        filename: `${outputFilename}.pdf`
+        filename: `${outputFilename}.pdf`,
+        save: true  // Save PDF on server
       }),
       signal: controller.signal
     }).finally(() => clearTimeout(timeout));
@@ -72,14 +73,37 @@ export async function generatePdfFromHtml(html, outputFilename, css = '') {
       throw new Error(`WeasyPrint API error (${response.status}): ${errorText}`);
     }
     
-    // Get PDF buffer from response
-    const pdfBuffer = await response.buffer();
+    // Get the PDF URL from response headers
+    const pdfUrl = response.headers.get('X-PDF-URL');
+    const pdfId = response.headers.get('X-PDF-ID');
     
-    // Write to file
-    await writeFile(outputPath, pdfBuffer);
-    
-    console.log(`PDF generated successfully: ${outputPath}`);
-    return outputPath;
+    if (pdfUrl || pdfId) {
+      // Store the external PDF URL for later retrieval
+      const pdfInfo = {
+        externalUrl: pdfUrl || `${WEASYPRINT_API_URL}/pdf/${pdfId}`,
+        externalId: pdfId,
+        filename: `${outputFilename}.pdf`,
+        createdAt: new Date().toISOString()
+      };
+      
+      // Save PDF info to a JSON file for tracking
+      const infoPath = path.join(OUTPUT_DIR, `${outputFilename}.json`);
+      await writeFile(infoPath, JSON.stringify(pdfInfo, null, 2));
+      
+      // Also save the PDF buffer locally as backup
+      const pdfBuffer = await response.buffer();
+      await writeFile(outputPath, pdfBuffer);
+      
+      console.log(`PDF generated successfully: ${outputPath}`);
+      console.log(`External PDF URL: ${pdfInfo.externalUrl}`);
+      return outputPath;
+    } else {
+      // Fallback to original behavior if no URL in headers
+      const pdfBuffer = await response.buffer();
+      await writeFile(outputPath, pdfBuffer);
+      console.log(`PDF generated successfully: ${outputPath}`);
+      return outputPath;
+    }
     
   } catch (error) {
     console.error('Error generating PDF with external WeasyPrint API:', error);
