@@ -33,8 +33,6 @@ services:
         type: SECRET
       - key: ADMIN_PASSWORD
         type: SECRET
-      - key: WEASYPRINT_AVAILABLE
-        value: "true"
     build_command: npm install && (pip3 install -r requirements.txt || echo "WeasyPrint installation failed") && (python3 -m weasyprint --version || echo "WeasyPrint not available")
     run_command: npm start
 

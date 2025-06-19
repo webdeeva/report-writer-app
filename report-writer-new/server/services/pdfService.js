@@ -21,12 +21,28 @@ const __dirname = path.dirname(__filename);
 
 // Import templateService using ES module syntax
 import * as templateService from './templateService.js';
-
-// Check if WeasyPrint is available
-const USE_HTML_FALLBACK = !process.env.WEASYPRINT_AVAILABLE;
+import { execSync } from 'child_process';
 
 // Path to the WeasyPrint generator script
 const WEASYPRINT_SCRIPT = path.join(__dirname, '../pdf_generator/weasyprint_generator.py');
+
+// Check if WeasyPrint is available by testing if python3 and the script exist
+let USE_HTML_FALLBACK = true;
+try {
+  // Check if python3 is available
+  execSync('which python3', { stdio: 'ignore' });
+  // Check if WeasyPrint script exists
+  if (fs.existsSync(WEASYPRINT_SCRIPT)) {
+    // Try to import weasyprint in Python
+    execSync('python3 -c "import weasyprint"', { stdio: 'ignore' });
+    USE_HTML_FALLBACK = false;
+    console.log('WeasyPrint is available');
+  } else {
+    console.log('WeasyPrint script not found');
+  }
+} catch (error) {
+  console.log('WeasyPrint not available, using HTML fallback');
+}
 
 // Output directory for PDF files
 const OUTPUT_DIR = path.join(__dirname, '../output');
