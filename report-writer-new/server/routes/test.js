@@ -69,4 +69,46 @@ router.post('/weasyprint-test', async (req, res) => {
   }
 });
 
+// Debug output directory
+router.get('/output-files', async (req, res) => {
+  try {
+    const fs = await import('fs');
+    const path = await import('path');
+    const { fileURLToPath } = await import('url');
+    
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const outputDir = path.join(__dirname, '../output');
+    
+    if (!fs.existsSync(outputDir)) {
+      return res.json({
+        exists: false,
+        message: 'Output directory does not exist'
+      });
+    }
+    
+    const files = fs.readdirSync(outputDir);
+    const fileDetails = files.map(file => {
+      const stats = fs.statSync(path.join(outputDir, file));
+      return {
+        name: file,
+        size: stats.size,
+        created: stats.birthtime,
+        modified: stats.mtime
+      };
+    });
+    
+    res.json({
+      exists: true,
+      path: outputDir,
+      files: fileDetails,
+      count: files.length
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
+});
+
 export default router;
