@@ -44,12 +44,28 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Report Writer API' });
 });
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
+    port: process.env.PORT
+  });
+});
+
 // API Routes
 import authRoutes from './routes/authRoutes.js';
 import peopleRoutes from './routes/peopleRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+
+// Add request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url} - Origin: ${req.get('origin')}`);
+  next();
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/people', peopleRoutes);

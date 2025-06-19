@@ -9,6 +9,16 @@ const apiUrl = import.meta.env.VITE_API_URL !== undefined
 
 axios.defaults.baseURL = apiUrl;
 
+console.log('Axios configuration:', {
+  baseURL: axios.defaults.baseURL,
+  env: {
+    VITE_API_URL: import.meta.env.VITE_API_URL,
+    DEV: import.meta.env.DEV,
+    PROD: import.meta.env.PROD
+  },
+  computedApiUrl: apiUrl
+});
+
 // Set a longer timeout for report generation (5 minutes)
 axios.defaults.timeout = 300000; // 300 seconds = 5 minutes
 

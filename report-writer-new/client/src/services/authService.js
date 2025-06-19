@@ -8,14 +8,33 @@ import axios from '../config/axios';
  */
 export const loginUser = async (username, password) => {
     try {
+        console.log('Attempting login with axios config:', {
+            baseURL: axios.defaults.baseURL,
+            url: '/api/auth/login',
+            fullURL: `${axios.defaults.baseURL}/api/auth/login`
+        });
+        
         const response = await axios.post('/api/auth/login', {
             username,
             password,
         });
+        
+        console.log('Login successful:', response.data);
         return response.data;
     }
     catch (error) {
+        console.error('Login error:', error);
         if (axios.isAxiosError(error)) {
+            console.error('Axios error details:', {
+                status: error.response?.status,
+                statusText: error.response?.statusText,
+                data: error.response?.data,
+                config: {
+                    url: error.config?.url,
+                    baseURL: error.config?.baseURL,
+                    fullURL: error.config?.baseURL + error.config?.url
+                }
+            });
             const message = error.response?.data?.message || error.message;
             throw new Error(message);
         }
