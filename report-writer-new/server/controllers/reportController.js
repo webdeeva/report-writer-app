@@ -452,6 +452,26 @@ const downloadReport = asyncHandler(async (req, res) => {
   console.log('Attempting to download file:', filePath);
   console.log('File exists check:', fs.existsSync(filePath));
   
+  // First check if there's a JSON file with external PDF info
+  const fileNameWithoutExt = fileName.replace('.pdf', '');
+  const jsonPath = path.join(outputDir, `${fileNameWithoutExt}.json`);
+  
+  if (fs.existsSync(jsonPath)) {
+    try {
+      const pdfInfo = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+      console.log('Found external PDF info:', pdfInfo);
+      
+      // Redirect to external PDF URL with download parameter
+      const downloadUrl = pdfInfo.externalUrl.includes('?') 
+        ? `${pdfInfo.externalUrl}&download=true`
+        : `${pdfInfo.externalUrl}?download=true`;
+      
+      return res.redirect(downloadUrl);
+    } catch (error) {
+      console.error('Error reading PDF info:', error);
+    }
+  }
+  
   // List files in output directory to debug
   console.log('Files in output directory:');
   const files = fs.readdirSync(outputDir);
