@@ -5,7 +5,7 @@ features:
 
 services:
   - name: api
-    dockerfile_path: report-writer-new/server/Dockerfile
+    environment_slug: node-js
     github:
       repo: webdeeva/report-writer-app
       branch: main

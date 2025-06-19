@@ -10,6 +10,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
+import { saveHtmlAsPdf } from './htmlPdfService.js';
 
 const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
@@ -20,6 +21,9 @@ const __dirname = path.dirname(__filename);
 
 // Import templateService using ES module syntax
 import * as templateService from './templateService.js';
+
+// Check if we're in production without WeasyPrint
+const USE_HTML_FALLBACK = process.env.NODE_ENV === 'production' && !process.env.WEASYPRINT_AVAILABLE;
 
 // Path to the WeasyPrint generator script
 const WEASYPRINT_SCRIPT = path.join(__dirname, '../pdf_generator/weasyprint_generator.py');
@@ -44,6 +48,12 @@ if (!fs.existsSync(OUTPUT_DIR)) {
  */
 async function generatePdfFromHtml(html, outputFilename, options = {}) {
   const { debug = false, baseUrl = null } = options;
+  
+  // Use HTML fallback in production if WeasyPrint is not available
+  if (USE_HTML_FALLBACK) {
+    console.log('Using HTML fallback for PDF generation');
+    return await saveHtmlAsPdf(html, outputFilename);
+  }
   
   // Create a temporary HTML file
   const tempHtmlPath = path.join(OUTPUT_DIR, `${outputFilename}.html`);

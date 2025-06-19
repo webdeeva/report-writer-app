@@ -499,6 +499,17 @@ const downloadReport = asyncHandler(async (req, res) => {
   }
 
   try {
+    // Check if it's an HTML file masquerading as PDF in production
+    if (process.env.NODE_ENV === 'production' && fileName.endsWith('.pdf')) {
+      const content = fs.readFileSync(filePath, 'utf8');
+      if (content.startsWith('<!DOCTYPE html>')) {
+        console.log('Serving HTML report as web page');
+        res.setHeader('Content-Type', 'text/html');
+        res.send(content);
+        return;
+      }
+    }
+    
     // Determine content type based on file extension
     const ext = path.extname(fileName).toLowerCase();
     const contentType = ext === '.pdf' ? 'application/pdf' : 
