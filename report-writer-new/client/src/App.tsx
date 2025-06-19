@@ -11,8 +11,6 @@ import AuthLayout from './components/layouts/AuthLayout';
 // Pages - Lazy loaded for better performance
 const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
 const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage'));
-const TestRoutesPage = lazy(() => import('./pages/TestRoutesPage')); // Direct import for test routes
-const TEST_PAGE_1144 = lazy(() => import('./pages/TEST_PAGE_1144')); // Test page created at 11:44 AM
 const UsagePage = lazy(() => import('./pages/dashboard/UsagePage'));
 const PeoplePage = lazy(() => import('./pages/people/PeoplePage'));
 const PersonFormPage = lazy(() => import('./pages/people/PersonFormPage'));
@@ -75,11 +73,6 @@ function App() {
         {/* Form Components Demo - unprotected for easy access */}
         <Route path="/form-components-demo" element={<FormComponentsDemo />} />
         
-        {/* Test Routes Page - unprotected for easy access */}
-        <Route path="/test-routes" element={<TestRoutesPage />} />
-        
-        {/* TEST PAGE - created at 11:44 AM */}
-        <Route path="/test-page-1144" element={<TEST_PAGE_1144 />} />
         
         {/* Dashboard routes - protected */}
         <Route
