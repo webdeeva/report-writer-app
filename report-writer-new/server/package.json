@@ -21,6 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "lowdb": "^6.1.1",
     "marked": "^15.0.7",
+    "multer": "^1.4.5-lts.1",
     "node-fetch": "^3.3.2",
     "nunjucks": "^3.2.4",
     "openai": "^4.24.1"
