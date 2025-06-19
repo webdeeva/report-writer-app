@@ -27,7 +27,7 @@ services:
         value: "output"
       - key: JWT_SECRET
         type: SECRET
-      - key: OPENAI_API_KEY
+      - key: OPENROUTER_API_KEY
         type: SECRET
       - key: ADMIN_USERNAME
         type: SECRET

@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Path to the cards.json file
-const CARDS_JSON_PATH = path.join(__dirname, '../../cards.json');
+const CARDS_JSON_PATH = path.join(__dirname, '../data/cards.json');
 
 // Cache for card data
 let cardDataCache = null;

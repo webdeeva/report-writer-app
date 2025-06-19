@@ -28,8 +28,8 @@ export const generateYearlyReportData = async (person, age = null) => {
   // Calculate current age if not provided
   const currentAge = age !== null ? age : calculateAge(person.birthdate);
   
-  // Use originalDateFormat if available, otherwise use birthdate
-  const birthdateToUse = person.originalDateFormat || person.birthdate;
+  // Always use birthdate - originalDateFormat is just a format hint, not the actual date
+  const birthdateToUse = person.birthdate;
   
   // Calculate birth cards
   const birthCards = await calculateBirthCards(birthdateToUse);
@@ -143,8 +143,8 @@ export const generateLifeReportData = async (person) => {
     console.log(`Starting life report data generation for ${person.name}`);
     console.log(`Person object:`, JSON.stringify(person, null, 2));
     
-    // Use originalDateFormat if available otherwise use birthdate
-    const birthdateToUse = person.originalDateFormat || person.birthdate;
+    // Always use birthdate - originalDateFormat is just a format hint, not the actual date
+    const birthdateToUse = person.birthdate;
     console.log(`Using birthdate: ${birthdateToUse} (originalDateFormat: ${person.originalDateFormat}, birthdate: ${person.birthdate})`);
 
     // Calculate birth cards
@@ -297,9 +297,9 @@ export const generateRelationshipReportData = async (person1, person2) => {
       throw new Error('Both people must have birthdates');
     }
     
-    // Use originalDateFormat if available, otherwise use birthdate
-    const person1BirthdateToUse = person1.originalDateFormat || person1.birthdate;
-    const person2BirthdateToUse = person2.originalDateFormat || person2.birthdate;
+    // Always use birthdate - originalDateFormat is just a format hint, not the actual date
+    const person1BirthdateToUse = person1.birthdate;
+    const person2BirthdateToUse = person2.birthdate;
     
     console.log(`Using birthdates: ${person1BirthdateToUse} and ${person2BirthdateToUse}`);
     
