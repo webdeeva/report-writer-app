@@ -32,7 +32,7 @@ export const loginUser = async (username, password) => {
                 config: {
                     url: error.config?.url,
                     baseURL: error.config?.baseURL,
-                    fullURL: error.config?.baseURL + error.config?.url
+                    fullURL: (error.config?.baseURL || '') + (error.config?.url || '')
                 }
             });
             const message = error.response?.data?.message || error.message;

@@ -42,7 +42,7 @@ export const loginUser = async (username: string, password: string): Promise<Log
         config: {
           url: error.config?.url,
           baseURL: error.config?.baseURL,
-          fullURL: error.config?.baseURL + error.config?.url
+          fullURL: (error.config?.baseURL || '') + (error.config?.url || '')
         }
       });
       const message = error.response?.data?.message || error.message;
