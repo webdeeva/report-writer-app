@@ -1,7 +1,13 @@
 import axios from 'axios';
 
 // Set default axios configuration
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+// In production, use relative URLs by default (empty string)
+// In development, use localhost
+const apiUrl = import.meta.env.VITE_API_URL !== undefined 
+  ? import.meta.env.VITE_API_URL 
+  : (import.meta.env.DEV ? 'http://localhost:8080' : '');
+
+axios.defaults.baseURL = apiUrl;
 
 // Set a longer timeout for report generation (5 minutes)
 axios.defaults.timeout = 300000; // 300 seconds = 5 minutes

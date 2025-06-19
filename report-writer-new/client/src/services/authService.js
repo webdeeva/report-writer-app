@@ -1,8 +1,9 @@
 import axios from 'axios';
-const API_URL = import.meta.env.VITE_API_URL;
-if (!API_URL) {
-    throw new Error('VITE_API_URL environment variable is not set');
-}
+// In production, use relative URLs (empty string)
+// In development, use the configured URL or localhost
+const API_URL = import.meta.env.VITE_API_URL !== undefined 
+  ? import.meta.env.VITE_API_URL 
+  : (import.meta.env.DEV ? 'http://localhost:8080' : '');
 /**
  * Login user with username and password
  * @param username User's username
