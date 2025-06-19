@@ -102,6 +102,7 @@ import peopleRoutes from './routes/peopleRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import testRoutes from './routes/test.js';
 
 // Add request logging middleware
 app.use((req, res, next) => {
@@ -115,6 +116,7 @@ app.use('/api/people', peopleRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/test', testRoutes);
 
 // Also mount routes without /api prefix for DigitalOcean deployment
 // (DigitalOcean strips the /api prefix when routing)
@@ -123,6 +125,7 @@ app.use('/people', peopleRoutes);
 app.use('/reports', reportRoutes);
 app.use('/admin', adminRoutes);
 app.use('/user', userRoutes);
+app.use('/test', testRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
