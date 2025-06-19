@@ -5,12 +5,12 @@ features:
 
 services:
   - name: api
-    environment_slug: node-js
+    dockerfile_path: report-writer-new/server/Dockerfile
     github:
       repo: webdeeva/report-writer-app
       branch: main
       deploy_on_push: true
-    source_dir: report-writer-new/server
+    source_dir: /
     http_port: 8080
     instance_count: 1
     instance_size_slug: basic-xxs
@@ -33,8 +33,6 @@ services:
         type: SECRET
       - key: ADMIN_PASSWORD
         type: SECRET
-    build_command: npm install
-    run_command: npm start
 
 static_sites:
   - name: client

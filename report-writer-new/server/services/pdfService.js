@@ -22,8 +22,8 @@ const __dirname = path.dirname(__filename);
 // Import templateService using ES module syntax
 import * as templateService from './templateService.js';
 
-// Check if we're in production without WeasyPrint
-const USE_HTML_FALLBACK = process.env.NODE_ENV === 'production' && !process.env.WEASYPRINT_AVAILABLE;
+// Check if WeasyPrint is available
+const USE_HTML_FALLBACK = !process.env.WEASYPRINT_AVAILABLE;
 
 // Path to the WeasyPrint generator script
 const WEASYPRINT_SCRIPT = path.join(__dirname, '../pdf_generator/weasyprint_generator.py');
