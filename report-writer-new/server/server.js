@@ -62,6 +62,32 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Debug endpoint to check data files
+app.get('/debug/data-files', async (req, res) => {
+  const dataFiles = {
+    'Card_Births.csv': fs.existsSync(path.join(dataDir, 'Card_Births.csv')),
+    'spreads.json': fs.existsSync(path.join(dataDir, 'spreads.json')),
+    'cards.json': fs.existsSync(path.join(dataDir, 'cards.json')),
+    'database.json': fs.existsSync(path.join(dataDir, 'database.json')),
+    dataDir: dataDir,
+    __dirname: __dirname,
+    cwd: process.cwd()
+  };
+  res.json(dataFiles);
+});
+app.get('/api/debug/data-files', async (req, res) => {
+  const dataFiles = {
+    'Card_Births.csv': fs.existsSync(path.join(dataDir, 'Card_Births.csv')),
+    'spreads.json': fs.existsSync(path.join(dataDir, 'spreads.json')),
+    'cards.json': fs.existsSync(path.join(dataDir, 'cards.json')),
+    'database.json': fs.existsSync(path.join(dataDir, 'database.json')),
+    dataDir: dataDir,
+    __dirname: __dirname,
+    cwd: process.cwd()
+  };
+  res.json(dataFiles);
+});
+
 // API Routes
 import authRoutes from './routes/authRoutes.js';
 import peopleRoutes from './routes/peopleRoutes.js';
