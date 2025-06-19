@@ -1,14 +1,15 @@
 /**
  * HTML-based PDF Service
  * 
- * This service provides HTML output for environments where WeasyPrint is not available.
- * The HTML can be converted to PDF by the browser or served as-is.
+ * This service uses Puppeteer to generate PDFs when WeasyPrint is not available.
+ * Falls back to HTML if Puppeteer is also not available.
  */
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
+import { generatePdfFromHtml as puppeteerGeneratePdf } from './puppeteerPdfService.js';
 
 const writeFile = promisify(fs.writeFile);
 const mkdir = promisify(fs.mkdir);
@@ -26,24 +27,43 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 }
 
 /**
- * Save HTML content as a file
+ * Save HTML content as PDF using Puppeteer or fallback to HTML
  * 
  * @param {string} html - HTML content to save
  * @param {string} outputFilename - Name of the output file (without extension)
- * @returns {Promise<string>} - Path to the saved HTML file
+ * @returns {Promise<string>} - Path to the saved file
  */
 export async function saveHtmlAsPdf(html, outputFilename) {
-  // For compatibility, we'll save as .pdf but it's actually HTML
-  const outputPath = path.join(OUTPUT_DIR, `${outputFilename}.pdf`);
-  
-  // Wrap HTML with print-friendly styling
-  const printableHtml = `
+  // First try to use html-pdf-node
+  try {
+    console.log('Attempting to generate PDF with html-pdf-node...');
+    return await puppeteerGeneratePdf(html, outputFilename);
+  } catch (error) {
+    console.log('PDF generation failed, saving as HTML with .pdf extension:', error.message);
+    // Fall back to saving as HTML if PDF generation fails
+    const outputPath = path.join(OUTPUT_DIR, `${outputFilename}.pdf`);
+    
+    // Wrap HTML with print-friendly styling
+    const printableHtml = `
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Report</title>
     <style>
+        .pdf-notice {
+            background-color: #fffbeb;
+            border: 1px solid #fbbf24;
+            padding: 12px;
+            margin: 20px;
+            border-radius: 6px;
+            color: #92400e;
+            font-family: Arial, sans-serif;
+            print-media: none;
+        }
+        @media print {
+            .pdf-notice { display: none; }
+        }
         @media print {
             body { margin: 0; }
             .page-break { page-break-after: always; }
@@ -78,6 +98,14 @@ export async function saveHtmlAsPdf(html, outputFilename) {
     </style>
 </head>
 <body>
+    <div class="pdf-notice">
+        <strong>Note:</strong> This is an HTML file with a .pdf extension. To view it properly:
+        <ul style="margin: 5px 0;">
+            <li>Rename the file extension from .pdf to .html</li>
+            <li>Open it in a web browser</li>
+            <li>Use the browser's Print → Save as PDF feature to create a real PDF</li>
+        </ul>
+    </div>
     ${html}
     <script>
         // Auto-print when opened in browser
@@ -88,13 +116,14 @@ export async function saveHtmlAsPdf(html, outputFilename) {
 </body>
 </html>`;
   
-  try {
-    await writeFile(outputPath, printableHtml, 'utf8');
-    console.log(`HTML report saved to: ${outputPath}`);
-    return outputPath;
-  } catch (error) {
-    console.error('Error saving HTML report:', error);
-    throw new Error(`Failed to save HTML report: ${error.message}`);
+    try {
+      await writeFile(outputPath, printableHtml, 'utf8');
+      console.log(`HTML report saved to: ${outputPath}`);
+      return outputPath;
+    } catch (writeError) {
+      console.error('Error saving HTML report:', writeError);
+      throw new Error(`Failed to save HTML report: ${writeError.message}`);
+    }
   }
 }
 

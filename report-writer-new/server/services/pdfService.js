@@ -65,9 +65,9 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 async function generatePdfFromHtml(html, outputFilename, options = {}) {
   const { debug = false, baseUrl = null } = options;
   
-  // Use HTML fallback in production if WeasyPrint is not available
+  // Use HTML fallback if WeasyPrint is not available
   if (USE_HTML_FALLBACK) {
-    console.log('Using HTML fallback for PDF generation');
+    console.log('WeasyPrint not available, using fallback PDF generation');
     return await saveHtmlAsPdf(html, outputFilename);
   }
   
