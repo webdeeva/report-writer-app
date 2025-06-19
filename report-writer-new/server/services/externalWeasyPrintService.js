@@ -5,7 +5,7 @@
  * The API is hosted on a Linode server at http://198.74.52.74/
  */
 
-import fetch, { AbortController } from 'node-fetch';
+import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
