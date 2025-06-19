@@ -5,7 +5,7 @@
  * The API is hosted on a Linode server at http://198.74.52.74/
  */
 
-import fetch from 'node-fetch';
+import fetch, { AbortController } from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -50,7 +50,10 @@ export async function generatePdfFromHtml(html, outputFilename, css = '') {
       }
     }
     
-    // Make request to external API
+    // Make request to external API with timeout
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    
     const response = await fetch(`${WEASYPRINT_API_URL}/generate-pdf`, {
       method: 'POST',
       headers: {
@@ -60,8 +63,9 @@ export async function generatePdfFromHtml(html, outputFilename, css = '') {
         html: html,
         css: css || '',
         filename: `${outputFilename}.pdf`
-      })
-    });
+      }),
+      signal: controller.signal
+    }).finally(() => clearTimeout(timeout));
     
     if (!response.ok) {
       const errorText = await response.text();
@@ -90,9 +94,12 @@ export async function generatePdfFromHtml(html, outputFilename, css = '') {
  */
 export async function isApiAvailable() {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    
     const response = await fetch(`${WEASYPRINT_API_URL}/`, {
-      timeout: 5000 // 5 second timeout
-    });
+      signal: controller.signal
+    }).finally(() => clearTimeout(timeout));
     
     if (response.ok) {
       const data = await response.json();
