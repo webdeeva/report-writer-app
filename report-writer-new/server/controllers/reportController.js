@@ -515,10 +515,38 @@ const downloadReport = asyncHandler(async (req, res) => {
       
       if (matchingReport && matchingReport.externalPdfUrl) {
         console.log('Found external PDF URL in database:', matchingReport.externalPdfUrl);
-        // Add /download to the URL for direct download
-        const downloadUrl = `${matchingReport.externalPdfUrl}/download`;
         
-        return res.redirect(downloadUrl);
+        // Proxy the PDF instead of redirecting
+        try {
+          // Add /download to the URL for direct download
+          const downloadUrl = `${matchingReport.externalPdfUrl}/download`;
+          console.log('Proxying PDF from:', downloadUrl);
+          
+          // Fetch the PDF from the external URL
+          const fetch = (await import('node-fetch')).default;
+          const pdfResponse = await fetch(downloadUrl);
+          
+          if (!pdfResponse.ok) {
+            throw new Error(`Failed to fetch PDF: ${pdfResponse.status} ${pdfResponse.statusText}`);
+          }
+          
+          // Set appropriate headers
+          res.setHeader('Content-Type', 'application/pdf');
+          res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+          
+          // Get content length if available
+          const contentLength = pdfResponse.headers.get('content-length');
+          if (contentLength) {
+            res.setHeader('Content-Length', contentLength);
+          }
+          
+          // Stream the PDF to the client
+          pdfResponse.body.pipe(res);
+          return;
+        } catch (proxyError) {
+          console.error('Error proxying PDF from external URL:', proxyError);
+          // Fall through to try other methods
+        }
       }
       
       console.log('No matching report found with external URL');
@@ -536,12 +564,38 @@ const downloadReport = asyncHandler(async (req, res) => {
       const pdfInfo = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
       console.log('Found external PDF info:', pdfInfo);
       
-      // Redirect to external PDF URL with download parameter
-      const downloadUrl = pdfInfo.externalUrl.includes('?') 
-        ? `${pdfInfo.externalUrl}&download=true`
-        : `${pdfInfo.externalUrl}?download=true`;
-      
-      return res.redirect(downloadUrl);
+      // Proxy the PDF instead of redirecting
+      try {
+        const downloadUrl = pdfInfo.externalUrl.includes('?') 
+          ? `${pdfInfo.externalUrl}&download=true`
+          : `${pdfInfo.externalUrl}?download=true`;
+        console.log('Proxying PDF from JSON URL:', downloadUrl);
+        
+        // Fetch the PDF from the external URL
+        const fetch = (await import('node-fetch')).default;
+        const pdfResponse = await fetch(downloadUrl);
+        
+        if (!pdfResponse.ok) {
+          throw new Error(`Failed to fetch PDF: ${pdfResponse.status} ${pdfResponse.statusText}`);
+        }
+        
+        // Set appropriate headers
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+        
+        // Get content length if available
+        const contentLength = pdfResponse.headers.get('content-length');
+        if (contentLength) {
+          res.setHeader('Content-Length', contentLength);
+        }
+        
+        // Stream the PDF to the client
+        pdfResponse.body.pipe(res);
+        return;
+      } catch (proxyError) {
+        console.error('Error proxying PDF from JSON URL:', proxyError);
+        // Fall through to try serving local file
+      }
     } catch (error) {
       console.error('Error reading PDF info:', error);
     }
