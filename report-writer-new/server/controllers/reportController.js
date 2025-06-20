@@ -364,6 +364,13 @@ const generateLifeReport = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Please provide personId');
   }
+  
+  console.log('Life report request received:', {
+    personId: personId,
+    userId: req.user.id,
+    hasUserSettings: !!userSettings,
+    timestamp: new Date().toISOString()
+  });
 
   // Check if user has reached their report limit
   const usage = await getReportUsage(req.user.id);
@@ -373,6 +380,8 @@ const generateLifeReport = asyncHandler(async (req, res) => {
   }
 
   try {
+    console.log('Starting life report generation for personId:', personId);
+    
     // Get person details
     const person = await getPersonById(personId);
 
@@ -396,7 +405,9 @@ const generateLifeReport = asyncHandler(async (req, res) => {
     const reportData = await generateLifeReportData(person);
     
     // Generate analysis using the AI service
+    console.log('Generating AI content...');
     const { content: analysis, tokensUsed: tokens, cost } = await generateLifeReportContent(reportData);
+    console.log('AI content generated, tokens used:', tokens);
     
     // Add the analysis to the report data
     reportData.content = analysis;
@@ -416,8 +427,12 @@ const generateLifeReport = asyncHandler(async (req, res) => {
       reportData.userId = req.user.id;
     }
     
+    console.log('Calling generateLifePdf with filename:', fileNameWithoutExt);
+    
     // Generate PDF and get the external URL if available
     const result = await generateLifePdf(reportData, fileNameWithoutExt);
+    
+    console.log('PDF generation result:', result);
     
     // Check if we got an external URL (from WeasyPrint API)
     let pdfUrl = `/api/reports/download/${fileName}`;
