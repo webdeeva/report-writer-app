@@ -85,43 +85,51 @@ const YearlyReportPage = () => {
 
     setGenerating(true);
     
-    try {
-      // Get user settings from localStorage
-      const userSettings = getUserSettings();
-      
-      // Generate the yearly report
-      const reportResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/reports/yearly`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          personId: selectedPersonId,
-          customAge: customAge ? parseInt(customAge) : undefined,
-          originalDateFormat: selectedPerson?.originalDateFormat,
-          // Include user settings
-          userSettings: {
-            logoPath: userSettings.logoPath,
-            footerText: userSettings.footerText
-          }
-        }),
-      });
-      
-      if (!reportResponse.ok) {
-        throw new Error('Failed to generate report');
+    // Get user settings from localStorage
+    const userSettings = getUserSettings();
+    
+    // Navigate to reports page immediately with generating state
+    navigate('/dashboard/reports', { 
+      state: { 
+        generating: true, 
+        personName: selectedPerson?.name,
+        reportType: 'yearly' 
+      } 
+    });
+    
+    // Generate the report in the background
+    fetch(`${import.meta.env.VITE_API_URL}/api/reports/yearly`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        personId: selectedPersonId,
+        customAge: customAge ? parseInt(customAge) : undefined,
+        originalDateFormat: selectedPerson?.originalDateFormat,
+        // Include user settings
+        userSettings: {
+          logoPath: userSettings.logoPath,
+          footerText: userSettings.footerText
+        }
+      }),
+    }).then(async (response) => {
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to generate report');
       }
-      
-      const reportData = await reportResponse.json();
-      
-      // Navigate to the report history page or download the report
-      navigate('/dashboard/reports');
-    } catch (error) {
+      return response.json();
+    }).catch((error) => {
       console.error('Error generating report:', error);
-      alert('Failed to generate report. Please try again.');
-    } finally {
-      setGenerating(false);
-    }
+      // Navigate back with error state
+      navigate('/dashboard/reports', { 
+        state: { 
+          generating: false, 
+          error: error.message || 'Failed to generate report. Please try again.' 
+        } 
+      });
+    });
   };
 
   return (
