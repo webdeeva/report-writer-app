@@ -479,8 +479,25 @@ const generateLifeReport = asyncHandler(async (req, res) => {
   } catch (error) {
     console.error('Life report generation error:', error);
     console.error('Error stack:', error.stack);
-    res.status(500);
-    throw new Error('Failed to generate life report');
+    
+    // Send appropriate error response based on the error type
+    if (error.message.includes('timeout')) {
+      res.status(504).json({ 
+        error: 'Report generation timed out. This can happen with complex reports. Please try again.' 
+      });
+    } else if (error.message.includes('API') || error.message.includes('OpenAI')) {
+      res.status(503).json({ 
+        error: 'AI service is temporarily unavailable. Please try again in a few moments.' 
+      });
+    } else if (error.message.includes('memory') || error.message.includes('heap')) {
+      res.status(507).json({ 
+        error: 'Server resources exhausted. Please try again later.' 
+      });
+    } else {
+      res.status(500).json({ 
+        error: 'Failed to generate report. Please try again.' 
+      });
+    }
   }
 });
 

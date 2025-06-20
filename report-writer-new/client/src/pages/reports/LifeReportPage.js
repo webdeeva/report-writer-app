@@ -81,17 +81,39 @@ const LifeReportPage = () => {
             }),
         }).then(async (response) => {
             if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || 'Failed to generate report');
+                let errorMessage = 'Failed to generate report';
+                try {
+                    const errorText = await response.text();
+                    // Check if it's an HTML error page (like 502 Bad Gateway)
+                    if (errorText.includes('<html>') || errorText.includes('502 Bad Gateway')) {
+                        errorMessage = 'Server is temporarily unavailable. Please try again in a few moments.';
+                    } else if (errorText.includes('503')) {
+                        errorMessage = 'Service is temporarily overloaded. Please try again later.';
+                    } else if (errorText.includes('timeout')) {
+                        errorMessage = 'Report generation timed out. This can happen with complex reports. Please try again.';
+                    } else if (errorText) {
+                        errorMessage = errorText;
+                    }
+                } catch (e) {
+                    console.error('Error parsing error response:', e);
+                }
+                throw new Error(errorMessage);
             }
             return response.json();
         }).catch((error) => {
             console.error('Error generating report:', error);
+            let userFriendlyError = error.message;
+            
+            // Handle network errors
+            if (error.message === 'Failed to fetch') {
+                userFriendlyError = 'Unable to connect to the server. Please check your internet connection and try again.';
+            }
+            
             // Navigate back with error state
             navigate('/dashboard/reports', { 
                 state: { 
                     generating: false, 
-                    error: error.message || 'Failed to generate report. Please try again.' 
+                    error: userFriendlyError
                 } 
             });
         });
