@@ -1,7 +1,13 @@
 # Report Writer Deployment Status
 
 ## Current Status (June 20, 2025)
-### Last Deployment Trigger: 2025-06-20 14:30 UTC
+### Last Deployment Trigger: 2025-06-20 15:00 UTC
+
+### Recent Updates
+- Improved report generation flow with immediate redirect
+- Fixed 'unknown' person names in report history
+- Added loading animation during report generation
+- Auto-refresh report list while generating
 
 ### ✅ What's Working
 1. **External WeasyPrint API Integration**
