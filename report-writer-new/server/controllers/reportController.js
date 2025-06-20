@@ -416,14 +416,32 @@ const generateLifeReport = asyncHandler(async (req, res) => {
       reportData.userId = req.user.id;
     }
     
-    const filePath = await generateLifePdf(reportData, fileNameWithoutExt);
+    // Generate PDF and get the external URL if available
+    const result = await generateLifePdf(reportData, fileNameWithoutExt);
+    
+    // Check if we got an external URL (from WeasyPrint API)
+    let pdfUrl = `/api/reports/download/${fileName}`;
+    let externalPdfUrl = null;
+    
+    // Try to read the JSON file with external URL info
+    try {
+      const jsonPath = path.join(outputDir, `${fileNameWithoutExt}.json`);
+      if (fs.existsSync(jsonPath)) {
+        const pdfInfo = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+        externalPdfUrl = pdfInfo.externalUrl;
+        console.log('Found external PDF URL:', externalPdfUrl);
+      }
+    } catch (error) {
+      console.log('No external PDF info found:', error.message);
+    }
 
     // Create report record in database
     const report = await createReport({
       type: 'life',
       person1Id: personId,
       content: analysis,
-      pdfUrl: `/api/reports/download/${fileName}`,
+      pdfUrl: pdfUrl,
+      externalPdfUrl: externalPdfUrl, // Store external URL if available
       tokensUsed: tokens || 0,
       cost: cost || 0,
       userId: req.user.id
@@ -431,7 +449,8 @@ const generateLifeReport = asyncHandler(async (req, res) => {
 
     res.json({
       report,
-      pdfUrl: `/api/reports/download/${fileName}`
+      pdfUrl: pdfUrl,
+      externalPdfUrl: externalPdfUrl
     });
   } catch (error) {
     console.error('Life report generation error:', error);
@@ -451,6 +470,27 @@ const downloadReport = asyncHandler(async (req, res) => {
 
   console.log('Attempting to download file:', filePath);
   console.log('File exists check:', fs.existsSync(filePath));
+  
+  // In production on DigitalOcean, check database for external URL
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      // Try to find the report in database by filename pattern
+      const reports = await Report.find({
+        pdfUrl: { $regex: fileName }
+      }).sort({ createdAt: -1 }).limit(1);
+      
+      if (reports.length > 0 && reports[0].externalPdfUrl) {
+        console.log('Found external PDF URL in database:', reports[0].externalPdfUrl);
+        const downloadUrl = reports[0].externalPdfUrl.includes('?') 
+          ? `${reports[0].externalPdfUrl}&download=true`
+          : `${reports[0].externalPdfUrl}?download=true`;
+        
+        return res.redirect(downloadUrl);
+      }
+    } catch (error) {
+      console.error('Error checking database for external URL:', error);
+    }
+  }
   
   // First check if there's a JSON file with external PDF info
   const fileNameWithoutExt = fileName.replace('.pdf', '');
