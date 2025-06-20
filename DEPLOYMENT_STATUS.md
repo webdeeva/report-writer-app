@@ -1,6 +1,7 @@
 # Report Writer Deployment Status
 
 ## Current Status (June 20, 2025)
+### Last Deployment Trigger: 2025-06-20 14:30 UTC
 
 ### ✅ What's Working
 1. **External WeasyPrint API Integration**
