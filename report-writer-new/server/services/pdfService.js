@@ -242,9 +242,10 @@ async function generateYearlyReport(data, customFilename) {
  * @param {Array} data.challenges - Life challenges
  * @param {Array} data.opportunities - Life opportunities
  * @param {Array} data.recommendations - Life recommendations
+ * @param {string} [customFilename] - Optional custom filename (without extension)
  * @returns {Promise<string>} - Path to the generated PDF file
  */
-async function generateLifeReport(data) {
+async function generateLifeReport(data, customFilename) {
   // Map legacy field names if needed
   const reportData = {
     ...data,
@@ -252,9 +253,14 @@ async function generateLifeReport(data) {
     birthdate: data.birthdate || data.birthDate,
   };
   
-  // Generate a unique filename
-  const timestamp = Date.now();
-  const filename = `${reportData.person_name.replace(/\s+/g, '_')}_Life_Report_${timestamp}`;
+  // Use custom filename if provided, otherwise generate one
+  let filename;
+  if (customFilename) {
+    filename = customFilename;
+  } else {
+    const timestamp = Date.now();
+    filename = `${reportData.person_name.replace(/\s+/g, '_')}_Life_Report_${timestamp}`;
+  }
   
   try {
     // Generate HTML content for the report using the template service
@@ -462,9 +468,10 @@ async function generateSinglesReport(data, customFilename) {
  * @param {Array} data.challenges - Life challenges
  * @param {Array} data.opportunities - Life opportunities
  * @param {Array} data.recommendations - Life recommendations
+ * @param {string} [customFilename] - Optional custom filename (without extension)
  * @returns {Promise<string>} - Path to the generated PDF file
  */
-async function generateChildrensLifeReport(data) {
+async function generateChildrensLifeReport(data, customFilename) {
   // Map legacy field names if needed
   const reportData = {
     ...data,
@@ -472,9 +479,14 @@ async function generateChildrensLifeReport(data) {
     birthdate: data.birthdate || data.birthDate,
   };
   
-  // Generate a unique filename
-  const timestamp = Date.now();
-  const filename = `${reportData.person_name.replace(/\s+/g, '_')}_Childrens_Life_Report_${timestamp}`;
+  // Use custom filename if provided, otherwise generate one
+  let filename;
+  if (customFilename) {
+    filename = customFilename;
+  } else {
+    const timestamp = Date.now();
+    filename = `${reportData.person_name.replace(/\s+/g, '_')}_Childrens_Life_Report_${timestamp}`;
+  }
   
   try {
     // Generate HTML content for the report using the template service
