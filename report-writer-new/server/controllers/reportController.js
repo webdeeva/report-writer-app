@@ -450,6 +450,13 @@ const generateLifeReport = asyncHandler(async (req, res) => {
       console.log('No external PDF info found:', error.message);
     }
 
+    console.log('Creating report record with:', {
+      type: 'life',
+      person1Id: personId,
+      pdfUrl: pdfUrl,
+      externalPdfUrl: externalPdfUrl
+    });
+    
     // Create report record in database
     const report = await createReport({
       type: 'life',
@@ -461,6 +468,8 @@ const generateLifeReport = asyncHandler(async (req, res) => {
       cost: cost || 0,
       userId: req.user.id
     });
+    
+    console.log('Report created:', report);
 
     res.json({
       report,
@@ -469,6 +478,7 @@ const generateLifeReport = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     console.error('Life report generation error:', error);
+    console.error('Error stack:', error.stack);
     res.status(500);
     throw new Error('Failed to generate life report');
   }
@@ -489,19 +499,29 @@ const downloadReport = asyncHandler(async (req, res) => {
   // In production on DigitalOcean, check database for external URL
   if (process.env.NODE_ENV === 'production') {
     try {
-      // Try to find the report in database by filename pattern
-      const reports = await Report.find({
-        pdfUrl: { $regex: fileName }
-      }).sort({ createdAt: -1 }).limit(1);
+      console.log('Checking for external URL for filename:', fileName);
       
-      if (reports.length > 0 && reports[0].externalPdfUrl) {
-        console.log('Found external PDF URL in database:', reports[0].externalPdfUrl);
-        const downloadUrl = reports[0].externalPdfUrl.includes('?') 
-          ? `${reports[0].externalPdfUrl}&download=true`
-          : `${reports[0].externalPdfUrl}?download=true`;
+      // Import the report model functions
+      const { getReports } = await import('../models/reportModel.js');
+      
+      // Get all reports for any user (since download might be public)
+      // In real app, you'd want to check authorization
+      const allReports = await getReports(null); // This might need adjustment based on your model
+      
+      // Find report with matching PDF URL
+      const matchingReport = allReports.find(report => 
+        report.pdfUrl && report.pdfUrl.includes(fileName)
+      );
+      
+      if (matchingReport && matchingReport.externalPdfUrl) {
+        console.log('Found external PDF URL in database:', matchingReport.externalPdfUrl);
+        // Add /download to the URL for direct download
+        const downloadUrl = `${matchingReport.externalPdfUrl}/download`;
         
         return res.redirect(downloadUrl);
       }
+      
+      console.log('No matching report found with external URL');
     } catch (error) {
       console.error('Error checking database for external URL:', error);
     }

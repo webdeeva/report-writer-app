@@ -158,4 +158,16 @@ router.get('/env-check', async (req, res) => {
   });
 });
 
+// Test direct PDF URL
+router.get('/pdf-url/:id', async (req, res) => {
+  const pdfId = req.params.id;
+  const pdfUrl = `http://198.74.52.74/pdf/${pdfId}`;
+  
+  res.json({
+    viewUrl: pdfUrl,
+    downloadUrl: `${pdfUrl}/download`,
+    message: 'Try opening these URLs in your browser'
+  });
+});
+
 export default router;
