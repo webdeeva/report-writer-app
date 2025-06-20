@@ -1,0 +1,9 @@
+{
+  "version": "2025-06-20-15:00",
+  "updates": [
+    "Improved report generation flow with immediate redirect",
+    "Fixed unknown person names in report history",
+    "Added loading animation during report generation",
+    "Auto-refresh report list while generating"
+  ]
+}
