@@ -59,8 +59,11 @@ async function checkPdfMethod() {
   console.log('Using fallback HTML/PDF generation');
 }
 
-// Initialize PDF method check
-checkPdfMethod();
+// Initialize PDF method check after a short delay to ensure env vars are loaded
+setTimeout(() => {
+  console.log('Checking PDF method with WEASYPRINT_API_URL:', process.env.WEASYPRINT_API_URL);
+  checkPdfMethod();
+}, 1000);
 
 // Output directory for PDF files
 const OUTPUT_DIR = path.join(__dirname, '../output');

@@ -116,4 +116,46 @@ router.get('/output-files', async (req, res) => {
   }
 });
 
+// Test generating a life report with minimal data
+router.post('/test-life-report', async (req, res) => {
+  try {
+    const { generatePdfFromHtml } = await import('../services/externalWeasyPrintService.js');
+    
+    const testHtml = `
+    <html>
+    <head><style>body { font-family: Arial; }</style></head>
+    <body>
+      <h1>Test Life Report</h1>
+      <p>Testing PDF generation at ${new Date().toISOString()}</p>
+    </body>
+    </html>`;
+    
+    console.log('Testing life report generation...');
+    const result = await generatePdfFromHtml(testHtml, 'test-life-report', '');
+    
+    res.json({
+      success: true,
+      result: result,
+      message: 'Check logs for details'
+    });
+  } catch (error) {
+    console.error('Test life report error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      stack: error.stack
+    });
+  }
+});
+
+// Debug environment variables
+router.get('/env-check', async (req, res) => {
+  res.json({
+    NODE_ENV: process.env.NODE_ENV,
+    WEASYPRINT_API_URL: process.env.WEASYPRINT_API_URL,
+    hasUrl: !!process.env.WEASYPRINT_API_URL,
+    outputDir: process.env.PDF_OUTPUT_DIR
+  });
+});
+
 export default router;
