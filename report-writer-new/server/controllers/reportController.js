@@ -437,10 +437,35 @@ const generateLifeReport = asyncHandler(async (req, res) => {
     // Check if we got an external URL (from WeasyPrint API)
     let pdfUrl = `/api/reports/download/${fileName}`;
     let externalPdfUrl = null;
+    let actualFileName = fileName;
     
-    // Try to read the JSON file with external URL info
+    // First check if the expected PDF file exists
+    const expectedPdfPath = path.join(outputDir, fileName);
+    if (!fs.existsSync(expectedPdfPath)) {
+      console.log(`Expected PDF not found at: ${expectedPdfPath}`);
+      
+      // Look for PDF files with similar base name
+      const baseName = `${person.name.replace(/\s+/g, '_')}_Life_Report_`;
+      const files = fs.readdirSync(outputDir);
+      const matchingPdfs = files.filter(f => f.startsWith(baseName) && f.endsWith('.pdf'));
+      
+      if (matchingPdfs.length > 0) {
+        // Sort by timestamp (newest first)
+        matchingPdfs.sort((a, b) => {
+          const timestampA = parseInt(a.match(/_(\d+)\.pdf$/)?.[1] || '0');
+          const timestampB = parseInt(b.match(/_(\d+)\.pdf$/)?.[1] || '0');
+          return timestampB - timestampA;
+        });
+        
+        actualFileName = matchingPdfs[0];
+        console.log(`Found actual PDF file: ${actualFileName}`);
+        pdfUrl = `/api/reports/download/${actualFileName}`;
+      }
+    }
+    
+    // Try to read the JSON file with external URL info (using actual filename)
     try {
-      const jsonPath = path.join(outputDir, `${fileNameWithoutExt}.json`);
+      const jsonPath = path.join(outputDir, actualFileName.replace('.pdf', '.json'));
       if (fs.existsSync(jsonPath)) {
         const pdfInfo = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
         externalPdfUrl = pdfInfo.externalUrl;
@@ -454,7 +479,8 @@ const generateLifeReport = asyncHandler(async (req, res) => {
       type: 'life',
       person1Id: personId,
       pdfUrl: pdfUrl,
-      externalPdfUrl: externalPdfUrl
+      externalPdfUrl: externalPdfUrl,
+      actualFileName: actualFileName
     });
     
     // Create report record in database
