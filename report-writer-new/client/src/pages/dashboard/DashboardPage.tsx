@@ -17,7 +17,7 @@ const DashboardPage = () => {
       </div>
       
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Welcome, {user?.name || 'User'}</h2>
+        <h2 className="text-2xl font-bold">Welcome, {user?.username || 'User'}</h2>
         <Link to="/dashboard/people/new" className="btn bg-secondary-dark text-white hover:bg-secondary-light">
           + Add Person
         </Link>
