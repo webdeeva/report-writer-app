@@ -12,7 +12,12 @@ const router = express.Router();
 // Test external WeasyPrint API connectivity
 router.get('/weasyprint-health', async (req, res) => {
   try {
-    const response = await fetch('http://198.74.52.74/');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    
+    const response = await fetch('http://198.74.52.74/', {
+      signal: controller.signal
+    }).finally(() => clearTimeout(timeout));
     const data = await response.json();
     res.json({
       success: true,
