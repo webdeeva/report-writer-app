@@ -10,19 +10,24 @@ const DashboardPage = () => {
 
   return (
     <div>
+      {/* DEPLOYMENT TEST BANNER */}
+      <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-lg mb-6 animate-pulse">
+        <h1 className="text-2xl font-bold">🚀 DEPLOYMENT TEST - {new Date().toLocaleString()}</h1>
+        <p className="text-sm">Version: 2025-06-20 15:10 UTC - Report generation improvements active!</p>
+      </div>
+      
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold bg-red-500 text-white p-4">DEBUG: DASHBOARD LOADED - {new Date().toLocaleTimeString()}</h2>
+        <h2 className="text-2xl font-bold">Welcome, {user?.name || 'User'}</h2>
         <Link to="/dashboard/people/new" className="btn bg-secondary-dark text-white hover:bg-secondary-light">
           + Add Person
         </Link>
       </div>
       
       <h3 className="text-xl font-bold mb-4 text-secondary-dark">Report Types</h3>
-      <div className="bg-yellow-200 p-2 mb-4">DEBUG: About to render report cards including Children's Life Report</div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {/* NEW: Children's Life Report Card */}
-        <div className="card hover:shadow-lg transition-shadow border-2 border-primary bg-red-50">
-          <h3 className="text-xl font-bold mb-2 text-primary-dark">Children's Life Report ✨</h3>
+        {/* Children's Life Report Card */}
+        <div className="card hover:shadow-lg transition-shadow">
+          <h3 className="text-xl font-bold mb-2 text-primary-dark">Children's Life Report</h3>
           <p className="text-secondary mb-4">
             A specialized report designed for children, providing insights into their development, learning style, and natural talents based on their birth card.
           </p>
@@ -32,8 +37,8 @@ const DashboardPage = () => {
         </div>
         
         {/* Report Type Cards */}
-        <div className="card hover:shadow-lg transition-shadow bg-green-50">
-          <h3 className="text-xl font-bold mb-2 text-green-700">Yearly Report 📅</h3>
+        <div className="card hover:shadow-lg transition-shadow">
+          <h3 className="text-xl font-bold mb-2">Yearly Report</h3>
           <p className="text-secondary mb-4">
             A detailed analysis of a person's upcoming year based on their birth card and current age. Includes yearly influences, key dates, and recommendations.
           </p>
