@@ -96,7 +96,15 @@ const createReport = async (reportData) => {
   db.data.reports.push(newReport);
   await saveDb();
   
-  return newReport;
+  // Add person names before returning
+  const person1 = db.data.people.find(p => p.id === reportData.person1Id);
+  const person2 = reportData.person2Id ? db.data.people.find(p => p.id === reportData.person2Id) : null;
+  
+  return {
+    ...newReport,
+    person1Name: person1 ? person1.name : 'Unknown',
+    person2Name: person2 ? person2.name : null
+  };
 };
 
 /**

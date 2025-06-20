@@ -1,10 +1,52 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useReports } from '@/hooks/useReports';
 import { FormLayout, FormHeader } from '@/components/forms';
 
 const ReportHistoryPage = () => {
-  const { reports, loading, error, downloadReport, deleteReport } = useReports();
+  const { reports, loading, error: hookError, downloadReport, deleteReport, fetchReports } = useReports();
   const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
+  const location = useLocation();
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatingMessage, setGeneratingMessage] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  
+  // Check for navigation state
+  useEffect(() => {
+    if (location.state) {
+      const { generating, personName, reportType, error: navError } = location.state as any;
+      
+      if (generating) {
+        setIsGenerating(true);
+        setGeneratingMessage(`Generating ${reportType || 'report'} for ${personName || 'selected person'}...`);
+        
+        // Auto-refresh reports every 3 seconds while generating
+        const interval = setInterval(() => {
+          fetchReports();
+        }, 3000);
+        
+        // Stop refreshing after 30 seconds
+        const timeout = setTimeout(() => {
+          clearInterval(interval);
+          setIsGenerating(false);
+          setGeneratingMessage('');
+        }, 30000);
+        
+        return () => {
+          clearInterval(interval);
+          clearTimeout(timeout);
+        };
+      }
+      
+      if (navError) {
+        setError(navError);
+        setIsGenerating(false);
+      }
+      
+      // Clear location state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location, fetchReports]);
   
   const handleDownload = async (reportId: number) => {
     await downloadReport(reportId);
@@ -58,10 +100,19 @@ const ReportHistoryPage = () => {
         description="View and download your previously generated reports."
       />
       
-      {error && (
+      {(error || hookError) && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
           <strong className="font-bold">Error: </strong>
-          <span className="block sm:inline">{error}</span>
+          <span className="block sm:inline">{error || hookError}</span>
+        </div>
+      )}
+      
+      {isGenerating && (
+        <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded relative mb-6" role="status">
+          <div className="flex items-center">
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-700 mr-3"></div>
+            <span>{generatingMessage}</span>
+          </div>
         </div>
       )}
       
