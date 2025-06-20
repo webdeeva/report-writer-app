@@ -53,40 +53,48 @@ const LifeReportPage = () => {
             return;
         }
         setGenerating(true);
-        try {
-            // Get user settings from localStorage
-            const userSettings = getUserSettings();
-            // Generate the life report
-            const reportResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/reports/life`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    personId: selectedPersonId,
-                    originalDateFormat: selectedPerson?.originalDateFormat,
-                    // Include user settings
-                    userSettings: {
-                        logoPath: userSettings.logoPath,
-                        footerText: userSettings.footerText
-                    }
-                }),
-            });
-            if (!reportResponse.ok) {
-                throw new Error('Failed to generate report');
+        // Get user settings from localStorage
+        const userSettings = getUserSettings();
+        // Navigate to reports page immediately with generating state
+        navigate('/dashboard/reports', { 
+            state: { 
+                generating: true, 
+                personName: selectedPerson?.name,
+                reportType: 'life' 
+            } 
+        });
+        // Generate the report in the background
+        fetch(`${import.meta.env.VITE_API_URL}/api/reports/life`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                personId: selectedPersonId,
+                originalDateFormat: selectedPerson?.originalDateFormat,
+                // Include user settings
+                userSettings: {
+                    logoPath: userSettings.logoPath,
+                    footerText: userSettings.footerText
+                }
+            }),
+        }).then(async (response) => {
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || 'Failed to generate report');
             }
-            const reportData = await reportResponse.json();
-            // Navigate to the report history page or download the report
-            navigate('/dashboard/reports');
-        }
-        catch (error) {
+            return response.json();
+        }).catch((error) => {
             console.error('Error generating report:', error);
-            alert('Failed to generate report. Please try again.');
-        }
-        finally {
-            setGenerating(false);
-        }
+            // Navigate back with error state
+            navigate('/dashboard/reports', { 
+                state: { 
+                    generating: false, 
+                    error: error.message || 'Failed to generate report. Please try again.' 
+                } 
+            });
+        });
     };
     return (_jsx(FormLayout, { children: _jsxs("form", { onSubmit: handleSubmit, children: [_jsx(FormHeader, { title: "Life Report", description: "Generate a comprehensive life analysis based on the person's birth card and life spread." }), _jsxs(FormSection, { title: "Person Information", children: [_jsx(FormField, { label: "Select Person", required: true, error: errors.personId, children: _jsx(PersonSelect, { value: selectedPersonId, onChange: handlePersonSelect, placeholder: "Select a person", required: true }) }), selectedPerson && (_jsx(FormField, { label: "Birth Date", children: _jsx("p", { className: "text-gray-700", children: selectedPerson.originalDateFormat ||
                                     // Format without timezone conversion to avoid date shifting
