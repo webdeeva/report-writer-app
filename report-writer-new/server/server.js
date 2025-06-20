@@ -22,6 +22,9 @@ const __dirname = path.dirname(__filename);
 // Create Express app
 const app = express();
 
+// Set server timeout to 5 minutes for long-running requests
+app.set('timeout', 300000); // 5 minutes in milliseconds
+
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 

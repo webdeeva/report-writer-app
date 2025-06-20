@@ -471,10 +471,17 @@ const generateLifeReport = asyncHandler(async (req, res) => {
     
     console.log('Report created:', report);
 
-    res.json({
-      report,
-      pdfUrl: pdfUrl,
-      externalPdfUrl: externalPdfUrl
+    // Send response immediately to avoid timeout
+    res.status(200).json({
+      success: true,
+      report: {
+        id: report.id,
+        type: report.type,
+        pdfUrl: pdfUrl,
+        externalPdfUrl: externalPdfUrl,
+        createdAt: report.createdAt
+      },
+      message: 'Report generated successfully'
     });
   } catch (error) {
     console.error('Life report generation error:', error);
