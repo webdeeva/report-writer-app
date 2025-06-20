@@ -265,16 +265,18 @@
     <!-- Birth Card (Sun position) displayed alone -->
     <div style="text-align: center; margin: 20px 0;">
       <h4 style="margin-bottom: 10px;">Birth Card</h4>
-      {% if spread_with_positions[0] %}
+      {% for position in spread_with_positions %}
+        {% if loop.index == 1 %}
         <div style="display: inline-block;">
-          <div class="card {{ spread_with_positions[0].card.suit|lower }}" style="width: 80px; height: 120px;">
-            <div class="card-top-left">{{ spread_with_positions[0].card.value }}</div>
-            <div class="card-center">{{ spread_with_positions[0].card.symbol }}</div>
-            <div class="card-bottom-right">{{ spread_with_positions[0].card.value }}</div>
+          <div class="card {{ position.card.suit|lower }}" style="width: 80px; height: 120px;">
+            <div class="card-top-left">{{ position.card.value }}</div>
+            <div class="card-center">{{ position.card.symbol }}</div>
+            <div class="card-bottom-right">{{ position.card.value }}</div>
           </div>
-          <div class="card-placement" style="font-size: 12px; margin-top: 5px;">{{ spread_with_positions[0].position }}</div>
+          <div class="card-placement" style="font-size: 12px; margin-top: 5px;">{{ position.position }}</div>
         </div>
-      {% endif %}
+        {% endif %}
+      {% endfor %}
     </div>
     
     <h1 class="text-center">Life Report</h1>
@@ -289,7 +291,8 @@
     <!-- Remaining 12 cards in 3 rows of 4 -->
     <div class="life-spread-section" style="padding: 10px; margin-bottom: 10px;">
       <div class="card-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; max-width: 400px; margin: 0 auto;">
-        {% for position in spread_with_positions[1:] %}
+        {% for position in spread_with_positions %}
+          {% if loop.index > 1 %}
           <div style="text-align: center;">
             <div class="card {{ position.card.suit|lower }}" style="width: 60px; height: 90px; margin: 0 auto;">
               <div class="card-top-left">{{ position.card.value }}</div>
@@ -298,6 +301,7 @@
             </div>
             <div class="card-placement" style="font-size: 10px; margin-top: 3px;">{{ position.position }}</div>
           </div>
+          {% endif %}
         {% endfor %}
       </div>
     </div>
