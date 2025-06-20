@@ -10,14 +10,8 @@ const DashboardPage = () => {
 
   return (
     <div>
-      {/* DEPLOYMENT TEST BANNER */}
-      <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-lg mb-6 animate-pulse">
-        <h1 className="text-2xl font-bold">🚀 DEPLOYMENT TEST - {new Date().toLocaleString()}</h1>
-        <p className="text-sm">Version: 2025-06-20 15:10 UTC - Report generation improvements active!</p>
-      </div>
-      
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Welcome, {user?.username || 'User'}</h2>
+        <h2 className="text-2xl font-bold">Dashboard</h2>
         <Link to="/dashboard/people/new" className="btn bg-secondary-dark text-white hover:bg-secondary-light">
           + Add Person
         </Link>
